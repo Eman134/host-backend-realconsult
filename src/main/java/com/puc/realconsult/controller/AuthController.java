@@ -51,9 +51,9 @@ public class AuthController {
     public ResponseEntity<?> logout(HttpServletResponse response) {
         Cookie cookie = new Cookie("token", null);
         cookie.setHttpOnly(true);
-        cookie.setSecure(true); // Se estiver usando HTTPS
-        cookie.setMaxAge(0); // Exclui o cookie
-        cookie.setPath("/"); // Garante que o cookie será removido em todo o domínio
+        cookie.setSecure(true);
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
 
         response.addCookie(cookie);
 

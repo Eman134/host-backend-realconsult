@@ -114,7 +114,7 @@ public class ClienteService {
         }
     }
 
-    public void validarCliente(ClienteModel cliente) {
+    public void validarCnpj(ClienteModel cliente) {
         cliente.setCnpj(CnpjUtils.limparCnpj(cliente.getCnpj()));
 
         if (clienteRepository.existsByCnpj(cliente.getCnpj())){
@@ -129,7 +129,7 @@ public class ClienteService {
     }
 
     public void cadastrar(ClienteModel cliente) {
-        validarCliente(cliente);
+        validarCnpj(cliente);
         clienteRepository.save(cliente);
     }
 
