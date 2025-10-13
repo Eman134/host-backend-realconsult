@@ -2,46 +2,91 @@ package com.puc.realconsult.controller;
 
 
 import com.puc.realconsult.model.ClienteModel;
+import com.puc.realconsult.model.RequisicoesApiModel;
+import com.puc.realconsult.repository.RequisicoesApiRepository;
 import com.puc.realconsult.service.ClienteService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.puc.realconsult.service.UsoApiService;
+import lombok.AllArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/clientes")
+@RequestMapping("/api")
+@AllArgsConstructor
 public class UsoApiClienteController {
 
-    @Autowired
-    private ClienteService clienteService;
+    private final UsoApiService usoApiService;
+    private final ClienteService clienteService;
 
-    // =========================
-    // Consultas contratadas
-    // =========================
-    @GetMapping("/{id}/consultascontratadas")
-    public Map<String, Integer> getConsultasContratadas(@PathVariable Long id) {
-        int total = clienteService.getConsultasContratadas(id);
-        return Map.of("consultasContratadas", total);
+
+    // 🔹 Retorna total de consultas realizadas filtradas
+    @GetMapping("/cliente/{idCliente}/realizadas")
+    public ResponseEntity<Integer> totalRealizadas(
+            @PathVariable Long idCliente,
+            @RequestParam(required = false) String uf,
+            @RequestParam(required = false) String baseMapa,
+            @RequestParam(required = false) String tipoContrato,
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataInicio,
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataFim
+    ) {
+
+        Timestamp inicioTS = dataInicio != null ? Timestamp.valueOf(dataInicio) : null;
+        Timestamp fimTS = dataFim != null ? Timestamp.valueOf(dataFim) : null;
+
+        int total = usoApiService.totalConsultasRealizadasComFiltro(
+                idCliente, baseMapa, uf, tipoContrato, inicioTS, fimTS
+        );
+
+        return ResponseEntity.ok(total);
     }
 
-    // =========================
-    // Consultas realizadas
-    // =========================
-    @GetMapping("/{id}/consultasrealizadas")
-    public Map<String, Integer> getConsultasRealizadas(@PathVariable Long id) {
-        int total = clienteService.getConsultasRealizadas(id);
-        return Map.of("consultasRealizadas", total);
+    // 🔹 Retorna total de consultas restantes filtradas
+    @GetMapping("/cliente/{idCliente}/saldo")
+    public ResponseEntity<Integer> totalSaldo(
+            @PathVariable Long idCliente,
+            @RequestParam(required = false) String uf,
+            @RequestParam(required = false) String baseMapa,
+            @RequestParam(required = false) String tipoContrato,
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataInicio,
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataFim
+    ) {
+
+        Timestamp inicioTS = dataInicio != null ? Timestamp.valueOf(dataInicio) : null;
+        Timestamp fimTS = dataFim != null ? Timestamp.valueOf(dataFim) : null;
+
+        int saldo = usoApiService.totalConsultasSaldoComFiltro(
+                idCliente, baseMapa, uf, tipoContrato, inicioTS, fimTS
+        );
+
+        return ResponseEntity.ok(saldo);
     }
 
-    // =========================
-    // Saldo de consultas
-    // =========================
-    @GetMapping("/{id}/saldoconsultas")
-    public Map<String, Integer> getSaldoConsultas(@PathVariable Long id) {
-        int saldo = clienteService.getSaldoConsultas(id);
-        return Map.of("saldoConsultas", saldo);
+
+    @GetMapping("/requisicoes/filtrar")
+    public ResponseEntity<List<RequisicoesApiModel>> filtrarRequisicoes(
+            @RequestParam(required = false) String baseMapa,
+            @RequestParam(required = false) String uf,
+            @RequestParam(required = false) String tipoContrato,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime inicio,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fim
+    ) {
+        Timestamp tsInicio = inicio != null ? Timestamp.valueOf(inicio) : null;
+        Timestamp tsFim = fim != null ? Timestamp.valueOf(fim) : null;
+
+        List<RequisicoesApiModel> filtradas = usoApiService.filtrarRequisicoes(baseMapa, uf, tipoContrato, tsInicio, tsFim);
+        return ResponseEntity.ok(filtradas);
     }
+
 
     // =========================
     // CRUD

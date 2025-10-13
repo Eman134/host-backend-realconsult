@@ -40,12 +40,9 @@ public class UserService {
             throw new RuntimeException("Email já está em uso: " + usuario.getEmail());
         }
 
+        usuario.setSenha(passwordEncoder.encode("123456"));
         usuario.setAvatarColor(gerarCorAvatar(usuario.getNome()));
-        
-        if (usuario.getSenha() == null || usuario.getSenha().trim().isEmpty()) {
-            usuario.setSenha(passwordEncoder.encode("123456"));
-        }
-        
+
         return repository.save(usuario);
     }
     

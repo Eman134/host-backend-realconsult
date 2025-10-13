@@ -9,11 +9,12 @@ import lombok.Data;
 
 @Data
 @Entity
+@Table(name = "usuario_api")
 public class UsuarioApiModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Long id;
     @Column(unique = true)
     private String login;
     @JoinColumn(name = "id_cliente")
