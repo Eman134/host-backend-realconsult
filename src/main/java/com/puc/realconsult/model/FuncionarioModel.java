@@ -5,15 +5,16 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.lang.Nullable;
 
 
 @Entity
+@Table(name ="funcionario")
 @Data
 
 public class FuncionarioModel{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "matricula")
     private Long matricula;
 
@@ -24,27 +25,28 @@ public class FuncionarioModel{
     @NotBlank
     private String unidade;
 
-    @NotBlank
+    @Column(name = "situacao")
     private String situacao;
 
     @ManyToOne
     @JoinColumn(name= "auditoria_id", referencedColumnName = "id")
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @Nullable
     private AuditoriaModel auditoria;
 
     @Column(name = "custo_atual")
-    private float custoAtual;
+    private Double custoAtual;
 
     @Column(name = "custo_proposto")
-    private float custoProposto;
+    private Double custoProposto;
 
 
     @Column(name = "economia_valor")
-    private float economiaValor;
+    private Double economiaValor;
 
 
     @Column(name = "economia_percentual")
-    private float economiaPercentual;
+    private Double economiaPercentual;
 
     @NotBlank
     @Column(name = "tipo_dia")
@@ -56,39 +58,39 @@ public class FuncionarioModel{
 
 
     @Column(name = "valor_diario")
-    private float valorDiario;
+    private Double valorDiario;
 
 
     @Column(name = "custo_implantado")
-    private float valorCustoImplantado;
+    private Double valorCustoImplantado;
 
 
     @Column(name = "economia_implantada")
-    private float valorEconomiaImplantada;
+    private Double valorEconomiaImplantada;
 
     @Column(name = "linhaum_ida")
-    private float tarifaLinhaUmIda;
+    private Double tarifaLinhaUmIda;
 
     @Column(name = "linhadois_ida")
-    private float tarifaLinhaDoisIda;
+    private Double tarifaLinhaDoisIda;
 
     @Column(name = "linhatres_ida")
-    private float tarifaLinhaTresIda;
+    private Double tarifaLinhaTresIda;
 
     @Column(name = "linhaquatro_ida")
-    private float tarifaLinhaQuatroIda;
+    private Double tarifaLinhaQuatroIda;
 
     @Column(name = "linhaum_volta")
-    private float tarifaLinhaUmVolta;
+    private Double tarifaLinhaUmVolta;
 
     @Column(name = "linhadois_volta")
-    private float tarifaLinhaDoisVolta;
+    private Double tarifaLinhaDoisVolta;
 
     @Column(name = "linhatres_volta")
-    private float tarifaLinhaTresVolta;
+    private Double tarifaLinhaTresVolta;
 
     @Column(name = "linhaquatro_volta")
-    private float tarifaLinhaQuatroVolta;
+    private Double tarifaLinhaQuatroVolta;
 
     @Column(name = "operadora_transporte")
     private String operadoraTransporte;

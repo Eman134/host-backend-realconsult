@@ -7,6 +7,7 @@ import lombok.Data;
 import javax.annotation.processing.Generated;
 
 @Entity
+@Table(name ="auditoria")
 @Data
 public class AuditoriaModel{
 

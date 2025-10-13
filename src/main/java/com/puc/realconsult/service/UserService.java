@@ -3,6 +3,7 @@ package com.puc.realconsult.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,7 +18,8 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
     
     private final UserRepository repository;
-    
+    private final PasswordEncoder passwordEncoder;
+
     public List<UserModel> listarTodosUsuarios() {
         return repository.findAll();
     }
@@ -37,11 +39,11 @@ public class UserService {
         if (repository.existsByEmail(usuario.getEmail())) {
             throw new RuntimeException("Email já está em uso: " + usuario.getEmail());
         }
-        
+
         usuario.setAvatarColor(gerarCorAvatar(usuario.getNome()));
         
         if (usuario.getSenha() == null || usuario.getSenha().trim().isEmpty()) {
-            usuario.setSenha("123456"); // Senha padrão
+            usuario.setSenha(passwordEncoder.encode("123456"));
         }
         
         return repository.save(usuario);

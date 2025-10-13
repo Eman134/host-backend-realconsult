@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import org.springframework.http.HttpStatus;
 import com.puc.realconsult.service.FuncionarioService;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -23,7 +25,7 @@ public class FuncionarioController {
 
     private final FuncionarioService service;
 
-    @PostMapping("/getdados")
+    @PostMapping("/postdados")
     public ResponseEntity getPlanilha(@RequestParam("file") MultipartFile file){
         try (InputStream is = file.getInputStream()){
              service.importarDados(is);
@@ -31,5 +33,18 @@ public class FuncionarioController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro: " + e.getMessage());
         }
         return ResponseEntity.ok().body(200);
+    }
+
+    @GetMapping("/listarfuncionarios")
+    public ResponseEntity<List<FuncionarioModel>> listarFuncionarios(
+        @RequestParam(required = false) String busca) {
+            try {
+                List<FuncionarioModel> funcionarios;
+                funcionarios = service.listarTodosFuncionarios();
+                return ResponseEntity.ok(funcionarios);
+
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
     }
 }
