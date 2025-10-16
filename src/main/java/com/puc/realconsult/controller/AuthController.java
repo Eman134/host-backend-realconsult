@@ -1,63 +1,89 @@
 package com.puc.realconsult.controller;
 
-import com.puc.realconsult.dto.AutenticarDTO;
-import com.puc.realconsult.dto.loginUsuarioDTO;
-import com.puc.realconsult.repository.UserRepository;
-import com.puc.realconsult.model.UserModel;
-import com.puc.realconsult.service.UserService;
+import com.puc.realconsult.config.HttpsConfig;
+import com.puc.realconsult.config.SecurityConfig;
 import com.puc.realconsult.config.TokenService;
+import com.puc.realconsult.dto.AutenticarDTO;
+import com.puc.realconsult.dto.EsqueceuSenhaRequest;
+import com.puc.realconsult.dto.RedefinirSenhaRequest;
+import com.puc.realconsult.dto.loginUsuarioDTO;
+import com.puc.realconsult.service.AuthService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
-    @Autowired
-    private UserRepository usuarioRepository;
+    private final AuthService authService;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final HttpsConfig httpsConfig;
 
-    @Autowired
-    private TokenService tokenService;
-
-    @Autowired
-    private UserService usuarioService;
+    private boolean https;
 
     @PostMapping("/login")
-    public ResponseEntity loginUsuario(@RequestBody @Valid AutenticarDTO data) {
+    public ResponseEntity<loginUsuarioDTO> login(@RequestBody @Valid AutenticarDTO data, HttpServletResponse response) {
 
-        var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.senha());
+        // Faz autenticação e gera token novo
+        var result = authService.login(data, authenticationManager);
 
-        var auth = this.authenticationManager.authenticate(usernamePassword);
+        // Limpa cookie antigo, caso exista
+        Cookie oldCookie = new Cookie("token", null);
+        oldCookie.setPath("/");
+        oldCookie.setHttpOnly(true);
+        oldCookie.setMaxAge(0);
+        response.addCookie(oldCookie);
 
-        var usuario = (UserModel) auth.getPrincipal();
-
-        var token = tokenService.gerarToken((UserModel) auth.getPrincipal());
-
-        System.out.println(usuario);
-
-        return ResponseEntity.ok(new loginUsuarioDTO(token, usuario.getId(), usuario.getNome(), usuario.getAvatarColor()));
-    }
-
-    @PostMapping("/logout")
-    public ResponseEntity<?> logout(HttpServletResponse response) {
-        Cookie cookie = new Cookie("token", null);
+        // Adiciona cookie com token novo
+        Cookie cookie = new Cookie("token", result.token());
         cookie.setHttpOnly(true);
-        cookie.setSecure(true);
-        cookie.setMaxAge(0);
+        cookie.setSecure(httpsConfig.isHttps());
+        cookie.setMaxAge(24 * 60 * 60);
         cookie.setPath("/");
-
         response.addCookie(cookie);
 
-        return ResponseEntity.ok().body("Logout bem-sucedido");
+        // Retorna DTO do usuário
+        return ResponseEntity.ok(result.user());
+    }
+
+
+
+    @PostMapping("/logout")
+    public ResponseEntity logout(HttpServletResponse response) {
+        authService.logout(response);
+        return ResponseEntity.ok("Logout bem-sucedido");
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity resetPassword(@RequestBody RedefinirSenhaRequest request) {
+        try {
+            String msg = authService.resetPassword(request);
+            return ResponseEntity.ok(msg);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestBody EsqueceuSenhaRequest request) {
+        try {
+            authService.forgotPassword(request);
+            return ResponseEntity.ok("E-mail de redefinição enviado com sucesso.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
 }
+

@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "ws_jobs")
+@Table(name = "requisicoes_api")
 public class RequisicoesApiModel {
 
     @Id

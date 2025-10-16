@@ -13,8 +13,10 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,6 +48,14 @@ public class UsoApiService {
         }
 
         return cliente;
+    }
+
+    public UsuarioApiModel buscarUsuarioPorIdCliente(Long idCliente){
+        UsuarioApiModel usuarioApiModel = usuarioApiRepository.findByIdCliente(idCliente);
+        if(usuarioApiModel == null){
+            throw new ResourceNotFound("Cliente não encontrado");
+        }
+        return usuarioApiModel;
     }
 
     public int totalConsulRealizada(Long idCliente){
@@ -84,64 +94,61 @@ public class UsoApiService {
     }
 
     public List<RequisicoesApiModel> filtrarRequisicoes(
-            String baseMapa,
-            String uf,
-            String tipoContrato,
             Timestamp inicio,
             Timestamp fim
     ) {
         // Busca todas inicialmente
         List<RequisicoesApiModel> todos = requisicoesApiRepository.findAll();
 
+
+        // Começa o stream
         return todos.stream()
-                .filter(r -> baseMapa == null || r.getLogin() != null && r.getLogin() != null &&
-                        r.getLogin().equals(r.getLogin()) &&
-                        r.getLogin() != null && r.getLogin() != null) // ajusta conforme relação
-                .filter(r -> uf == null || r.getLogin() != null && r.getLogin() != null) // ajustar
-                .filter(r -> tipoContrato == null || r.getLogin() != null && r.getLogin() != null) // ajustar
-                .filter(r -> inicio == null || !r.getBegin().before(inicio))
-                .filter(r -> fim == null || !r.getBegin().after(fim))
+                // Filtro por intervalo de data
+                .filter(r -> {
+                    if (inicio == null && fim == null) return true;
+                    if (r.getBegin() == null) return false;
+                    return (inicio == null || !r.getBegin().before(inicio))
+                            && (fim == null || !r.getBegin().after(fim));
+                })
                 .collect(Collectors.toList());
     }
 
     public int totalConsultasRealizadasComFiltro(
             Long idCliente,
-            String baseMapa,
-            String uf,
-            String tipoContrato,
             Timestamp inicio,
             Timestamp fim
     ) {
-        // Busca o cliente
+
         ClienteModel cliente = clienteRepository.findById(idCliente)
                 .orElseThrow(() -> new ResourceNotFound("Cliente não encontrado"));
 
-        // Filtra as requisições do cliente
-        List<RequisicoesApiModel> filtradas = filtrarRequisicoes(baseMapa, uf, tipoContrato, inicio, fim)
-                .stream()
-                .filter(r -> r.getLogin().equals(cliente.getIdCliente().toString())) // ajustar se necessário para login
-                .toList();
+        List<RequisicoesApiModel> filtradas = filtrarRequisicoes(inicio, fim);
+        List<RequisicoesApiModel> novaLista = new ArrayList<>();
 
-        return filtradas.size(); // retorna quantidade realizadas
+        for (RequisicoesApiModel requisicoesApiModel : filtradas) {
+            if (requisicoesApiModel.getLogin().equals(usuarioApiRepository.findByIdCliente(idCliente).getLogin())) {
+                novaLista.add(requisicoesApiModel);
+            }
+        }
+        return novaLista.size();
     }
 
-    public int totalConsultasSaldoComFiltro(
-            Long idCliente,
-            String baseMapa,
-            String uf,
-            String tipoContrato,
-            Timestamp inicio,
-            Timestamp fim
-    ) {
+    public int totalConsultasSaldoComFiltro(Long idCliente, Timestamp inicio, Timestamp fim) {
         ClienteModel cliente = clienteRepository.findById(idCliente)
                 .orElseThrow(() -> new ResourceNotFound("Cliente não encontrado"));
 
-        // Consultas realizadas filtradas
-        int realizadasFiltradas = totalConsultasRealizadasComFiltro(
-                idCliente, baseMapa, uf, tipoContrato, inicio, fim
-        );
+        String login = buscarUsuarioPorIdCliente(idCliente).getLogin();
+        int realizadasFiltradas;
 
-        // Saldo restante = total contratado - realizadas filtradas
+        if (inicio != null && fim != null) {
+            // ✅ Busca apenas dentro do período informado
+            realizadasFiltradas = requisicoesApiRepository.buscarReqPeriodoComLogin(inicio, fim, login);
+        } else {
+            // ✅ Sem filtro → busca total de todas as requisições
+            realizadasFiltradas = requisicoesApiRepository.buscarTodasReqPorLogin(login);
+        }
+
         return cliente.getNumeroConsultas() - realizadasFiltradas;
     }
+
 }

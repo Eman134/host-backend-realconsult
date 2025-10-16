@@ -1,22 +1,16 @@
 package com.puc.realconsult.controller;
-import jakarta.validation.Valid;
+
+import com.puc.realconsult.model.FuncionarioModel;
+import com.puc.realconsult.service.FuncionarioService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.puc.realconsult.model.FuncionarioModel;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.io.InputStream;
-import org.springframework.http.HttpStatus;
-import com.puc.realconsult.service.FuncionarioService;
 import java.util.List;
-import java.util.Map;
-
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
 
 @AllArgsConstructor
 @RestController

@@ -32,25 +32,25 @@ public class ClienteModel {
     @Column(name = "cnpj", length = 20, unique = true)
     private String cnpj;
 
-    @Column(name = "path", nullable = false, length = 100)
+    @Column(name = "path", length = 100)
     private String path;
 
-    @Column(name = "numero_consultas", nullable = false)
+    @Column(name = "numero_consultas")
     private Integer numeroConsultas = 0;
 
-    @Column(name = "numero_consultas_realizadas", nullable = false)
+    @Column(name = "numero_consultas_realizadas")
     private Integer numeroConsultasRealizadas = 0;
 
     @Column(name = "semVT")
     private Boolean semVT;
 
-    @Column(name = "tipoCartao", length = 50, nullable = false)
+    @Column(name = "tipoCartao", length = 50)
     private String tipoCartao = "Cartão Empresarial (PJ)";
 
-    @Column(name = "tipoRoteirizacao", length = 10, nullable = false)
+    @Column(name = "tipoRoteirizacao", length = 10)
     private String tipoRoteirizacao = "Tp";
 
-    @Column(name = "perfil_consulta", length = 10, nullable = false)
+    @Column(name = "perfil_consulta", length = 10)
     private String perfilConsulta = "pre pago";
 
     // =========================

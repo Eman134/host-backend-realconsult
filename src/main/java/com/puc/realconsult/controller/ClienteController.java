@@ -5,41 +5,50 @@ import com.puc.realconsult.model.ClienteModel;
 import com.puc.realconsult.service.ClienteService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
-@AllArgsConstructor
 @RestController
-@RequestMapping("/cliente")
+@RequestMapping("/api/clientes")
 public class ClienteController {
 
-    private final ClienteService service;
+    @Autowired
+    private ClienteService service;
 
-    @GetMapping("/listartodos")
+    @GetMapping
     public ResponseEntity<List<ClienteModel>> listarTodos(){
         List<ClienteModel> clientes = service.listar();
-        return clientes.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(clientes);
+        return ResponseEntity.ok(clientes);
+    }
+
+
+    @PostMapping
+    public ResponseEntity<ClienteModel> criar(@Valid @RequestBody ClienteModel cliente){
+        service.cadastrar(cliente);
+        return ResponseEntity.ok().body(cliente);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ClienteModel> atualizar(@Valid @RequestBody ClienteDTO cliente, @PathVariable("id") long id){
+        service.atualizarCliente(id ,cliente);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ClienteModel> deletar(@Valid @PathVariable("id") long id){
+        service.deletarCliente(id);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/buscarporid/{id}")
     public ResponseEntity<ClienteModel> buscarPorId(@PathVariable("id") long id){
         Optional<ClienteModel> cliente = service.buscarPorId(id);
         return cliente.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    @PostMapping("/criar")
-    public ResponseEntity<ClienteModel> criar(@Valid @RequestBody ClienteModel cliente){
-        service.cadastrar(cliente);
-        return ResponseEntity.ok().body(cliente);
-    }
-
-    @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<ClienteModel> deletar(@Valid @PathVariable("id") long id){
-        service.deletarCliente(id);
-        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/buscarporcnpj/{cnpj}")
@@ -54,9 +63,4 @@ public class ClienteController {
         return  clientes.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(clientes);
     }
 
-    @PutMapping("/atualizar/{id}")
-    public ResponseEntity<ClienteModel> atualizar(@Valid @RequestBody ClienteDTO cliente, @PathVariable("id") long id){
-        service.atualizarCliente(id ,cliente);
-        return ResponseEntity.ok().build();
-    }
 }
