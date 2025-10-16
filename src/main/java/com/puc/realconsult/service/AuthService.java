@@ -62,24 +62,6 @@ public class AuthService implements UserDetailsService {
         return new AuthLoginResult(token, userDTO);
     }
 
-    public void logout(HttpServletResponse response) {
-        // Limpa token
-        Cookie cookieToken = new Cookie("token", "");
-        cookieToken.setHttpOnly(true);
-        cookieToken.setSecure(httpsConfig.isHttps());
-        cookieToken.setMaxAge(0);   // remove
-        cookieToken.setPath("/");   // mesmo path do cookie original
-        response.addCookie(cookieToken);
-
-        // Limpa dados do usuário
-        Cookie cookieUserData = new Cookie("userData", "");
-        cookieUserData.setHttpOnly(true);
-        cookieUserData.setSecure(httpsConfig.isHttps());
-        cookieUserData.setMaxAge(0);
-        cookieUserData.setPath("/"); // mesmo path do cookie original
-        response.addCookie(cookieUserData);
-    }
-
     public String resetPassword(RedefinirSenhaRequest request) {
         Optional<ResetSenhaToken> tokenOpt = tokenRepository.findByToken(request.getToken());
 
