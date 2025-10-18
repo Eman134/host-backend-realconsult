@@ -1,9 +1,12 @@
 package com.puc.realconsult.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.puc.realconsult.utils.StatusUsuario;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
@@ -59,7 +62,17 @@ public class UserModel implements UserDetails{
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        
+        if ("Gerente".equals(this.cargo)) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_GERENTE"));
+            // Gerente tem acesso total
+            authorities.add(new SimpleGrantedAuthority("ROLE_ANALISTA"));
+        } else if ("Analista".equals(this.cargo)) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_ANALISTA"));
+        }
+        
+        return authorities;
     }
 
     @Override
@@ -70,22 +83,6 @@ public class UserModel implements UserDetails{
     @Override
     public String getUsername() {
         return this.email;
-    }
-
-    public enum StatusUsuario {
-        ATIVO("Ativo"),
-        INATIVO("Inativo");
-
-        private final String descricao;
-
-        StatusUsuario(String descricao) {
-            this.descricao = descricao;
-        }
-
-        public String getDescricao() {
-            return descricao;
-        }
-
     }
 
     @Override

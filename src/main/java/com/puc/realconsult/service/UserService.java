@@ -3,6 +3,7 @@ package com.puc.realconsult.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.puc.realconsult.utils.StatusUsuario;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,7 +70,7 @@ public class UserService {
         repository.deleteById(id);
     }
     
-    public List<UserModel> listarUsuariosPorStatus(UserModel.StatusUsuario status) {
+    public List<UserModel> listarUsuariosPorStatus(StatusUsuario status) {
         return repository.findByStatus(status);
     }
 

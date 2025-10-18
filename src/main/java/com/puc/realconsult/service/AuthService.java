@@ -1,5 +1,17 @@
 package com.puc.realconsult.service;
 
+import java.util.Optional;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import com.puc.realconsult.config.HttpsConfig;
 import com.puc.realconsult.config.TokenService;
 import com.puc.realconsult.dto.AutenticarDTO;
@@ -10,19 +22,9 @@ import com.puc.realconsult.model.ResetSenhaToken;
 import com.puc.realconsult.model.UserModel;
 import com.puc.realconsult.repository.ResetSenhaTokenRepository;
 import com.puc.realconsult.repository.UserRepository;
+
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class AuthService implements UserDetailsService {
@@ -42,9 +44,6 @@ public class AuthService implements UserDetailsService {
     @Autowired
     private EmailService emailService;
 
-    @Autowired
-    private HttpsConfig httpsConfig;
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByEmail(username);
@@ -57,7 +56,7 @@ public class AuthService implements UserDetailsService {
 
         String token = tokenService.gerarToken(usuario);
 
-        var userDTO = new loginUsuarioDTO(null, usuario.getId(), usuario.getNome(), usuario.getAvatarColor());
+        var userDTO = new loginUsuarioDTO(null, usuario.getId(), usuario.getNome(), usuario.getAvatarColor(), usuario.getCargo());
 
         return new AuthLoginResult(token, userDTO);
     }

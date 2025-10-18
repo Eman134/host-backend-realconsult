@@ -2,6 +2,7 @@ package com.puc.realconsult.repository;
 
 import java.util.List;
 
+import com.puc.realconsult.utils.StatusUsuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,7 +19,7 @@ public interface UserRepository extends JpaRepository<UserModel, Long> {
            "LOWER(u.cargo) LIKE LOWER(CONCAT('%', :termo, '%'))")
     List<UserModel> buscarPorTermo(@Param("termo") String termo);
     
-    List<UserModel> findByStatus(UserModel.StatusUsuario status);
+    List<UserModel> findByStatus(StatusUsuario status);
     
     boolean existsByEmail(String email);
     

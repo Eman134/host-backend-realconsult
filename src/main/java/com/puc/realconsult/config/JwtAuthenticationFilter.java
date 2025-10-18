@@ -1,7 +1,16 @@
 package com.puc.realconsult.config;
 
+import java.io.IOException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 import com.puc.realconsult.model.UserModel;
 import com.puc.realconsult.repository.UserRepository;
+import com.puc.realconsult.utils.RecoverToken;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -14,7 +23,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,12 +45,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        String token = recoverToken(request);
+        String token = RecoverToken.recoverToken(request);
 
         if (token == null) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json");
-            response.getWriter().write("{\"message\":\"Token obrigatório\"}");
+            sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "Token obrigatório");
             return;
         }
 
@@ -50,15 +56,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String login = tokenService.validarToken(token);
             UserModel userModel = userRepository.findByEmail(login);
             if (userModel == null) {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().write("{\"message\":\"Usuário não existe\"}");
+                sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "Usuário não existe");
                 return;
             }
 
             UserDetails usuario = org.springframework.security.core.userdetails.User.builder()
                     .username(userModel.getEmail())
                     .password(userModel.getSenha())
-                    .authorities(new ArrayList<>())
+                    .authorities(userModel.getAuthorities())
                     .build();
 
             SecurityContextHolder.getContext().setAuthentication(
@@ -66,50 +71,30 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             );
 
         } catch (ExpiredJwtException e) {
-            // Token expirado → limpa cookie
-            Cookie cookie = new Cookie("token", null);
-            cookie.setHttpOnly(true);
-            cookie.setPath("/");
-            cookie.setMaxAge(0);
-            response.addCookie(cookie);
-
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json");
-            response.getWriter().write("{\"message\":\"Token expirado\"}");
+            handleExpiredToken(response);
             return;
-
         } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json");
-            response.getWriter().write("{\"message\":\"Token inválido\"}");
+            sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "Token inválido");
             return;
         }
 
         filterChain.doFilter(request, response);
     }
 
-
-
-
-    private String recoverToken(HttpServletRequest request) {
-        String token = null;
-        if (request.getCookies() != null) {
-            for (var cookie : request.getCookies()) {
-                if ("token".equals(cookie.getName())) {
-                    token = cookie.getValue();
-                    break;
-                }
-            }
-        }
-
-        if (token == null) {
-            String authHeader = request.getHeader("Authorization");
-            if (authHeader != null && authHeader.startsWith("Bearer ")) {
-                return authHeader.substring(7);
-            }
-        }
-
-        return token;
+    private void sendErrorResponse(HttpServletResponse response, int status, String message) throws IOException {
+        response.setStatus(status);
+        response.setContentType("application/json");
+        response.getWriter().write("{\"message\":\"" + message + "\"}");
     }
-}
 
+    private void handleExpiredToken(HttpServletResponse response) throws IOException {
+        Cookie cookie = new Cookie("token", null);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+
+        sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "Token expirado");
+    }
+
+}

@@ -22,9 +22,9 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
@@ -34,10 +34,12 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtFilter;
 
     @Value("${FRONTEND_URL:http://localhost:3000}")
-    private String allowedOriginsCsv;
+    private String allowedOrigin;
 
     @Bean
-    public PasswordEncoder passwordEncoder() { return new BCryptPasswordEncoder(); }
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration cfg) throws Exception {
@@ -46,15 +48,11 @@ public class SecurityConfig {
 
     @Bean(name = "appCors")
     public CorsConfigurationSource appCors() {
-        List<String> origins = Arrays.stream(allowedOriginsCsv.split(","))
-                .map(String::trim).filter(s -> !s.isEmpty())
-                .collect(Collectors.toList());
-
         CorsConfiguration cfg = new CorsConfiguration();
-        cfg.setAllowedOrigins(origins);
-        cfg.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
+        cfg.setAllowedOrigins(List.of(allowedOrigin));
+        cfg.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         cfg.setAllowedHeaders(List.of("*"));
-        cfg.setExposedHeaders(List.of("Set-Cookie","Authorization"));
+        cfg.setExposedHeaders(List.of("Set-Cookie", "Authorization"));
         cfg.setAllowCredentials(true);
         cfg.setMaxAge(Duration.ofHours(1).getSeconds());
 
@@ -66,13 +64,17 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                .cors(c -> c.configurationSource(appCors()))
+                .cors(c -> c.configurationSource(appCors()))  // Usar a configuração CORS com a URL única
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(h -> h.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(a -> a
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/api/auth/**","/h2-console/**").permitAll()
+                        .requestMatchers("/api/auth/**", "/h2-console/**").permitAll()
+                        .requestMatchers("/api/usuarios/**").hasRole("GERENTE")
+                        .requestMatchers("/api/clientes/**").hasRole("GERENTE")
+                        .requestMatchers("/api/auditoria/**").hasAnyRole("GERENTE", "ANALISTA")
+                        .requestMatchers("/api/usoApi/**").hasAnyRole("GERENTE", "ANALISTA")
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll()
                 )

@@ -3,6 +3,7 @@ package com.puc.realconsult.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.puc.realconsult.utils.StatusUsuario;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -102,7 +103,7 @@ public class UserController {
     
     @GetMapping("/status/{status}")
     public ResponseEntity<List<UserModel>> listarUsuariosPorStatus(
-            @PathVariable UserModel.StatusUsuario status) {
+            @PathVariable StatusUsuario status) {
         try {
             List<UserModel> usuarios = service.listarUsuariosPorStatus(status);
             return ResponseEntity.ok(usuarios);
