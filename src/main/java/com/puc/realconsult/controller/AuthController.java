@@ -12,7 +12,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -38,9 +37,6 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final HttpsConfig httpsConfig;
 
-    @Value("${FRONTEND_URL:http://localhost:3000}")
-    private String frontUrl;
-
     @Autowired
     private TokenService tokenService;
     @Autowired
@@ -48,15 +44,6 @@ public class AuthController {
 
     @GetMapping("/me")
     public ResponseEntity<?> me(HttpServletRequest request) {
-
-        boolean https = httpsConfig.isHttps();
-        boolean crossSite = httpsConfig.isCrossSite();
-
-        System.out.println("ME DATA");
-        System.out.println("HTTPS: " + https);
-        System.out.println("CROSSSITE: " + crossSite);
-        System.out.println("FRONTEND_URL: " + frontUrl);
-
         String token = RecoverToken.recoverToken(request);
         if (token == null) {
             return ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED)

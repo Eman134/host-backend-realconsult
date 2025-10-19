@@ -1,12 +1,13 @@
 package com.puc.realconsult.config;
 
-import lombok.RequiredArgsConstructor;
+import java.time.Duration;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -20,9 +21,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.time.Duration;
-import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 
@@ -71,10 +69,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(a -> a
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/auth/**", "/h2-console/**").permitAll()
-                        .requestMatchers("/api/usuarios/**").hasRole("GERENTE")
-                        .requestMatchers("/api/clientes/**").hasRole("GERENTE")
-                        .requestMatchers("/api/auditoria/**").hasAnyRole("GERENTE", "ANALISTA")
-                        .requestMatchers("/api/usoApi/**").hasAnyRole("GERENTE", "ANALISTA")
+                        .requestMatchers("/api/usuarios/**").hasAnyRole("ADMINISTRADOR", "GERENTE")
+                        .requestMatchers("/api/clientes/**").hasAnyRole("ADMINISTRADOR", "GERENTE")
+                        .requestMatchers("/api/despesas/**").hasAnyRole("ADMINISTRADOR", "GERENTE")
+                        .requestMatchers("/api/economies/**").hasAnyRole("ADMINISTRADOR", "GERENTE")
+                        .requestMatchers("/api/auditoria/**").hasAnyRole("ADMINISTRADOR", "GERENTE", "ANALISTA")
+                        .requestMatchers("/api/usoApi/**").hasAnyRole("ADMINISTRADOR", "GERENTE", "ANALISTA")
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll()
                 )

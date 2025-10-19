@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.puc.realconsult.utils.StatusUsuario;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.puc.realconsult.utils.StatusUsuario;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -64,7 +65,12 @@ public class UserModel implements UserDetails{
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
         
-        if ("Gerente".equals(this.cargo)) {
+        if ("Administrador".equals(this.cargo)) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMINISTRADOR"));
+            // Administrador tem acesso total
+            authorities.add(new SimpleGrantedAuthority("ROLE_GERENTE"));
+            authorities.add(new SimpleGrantedAuthority("ROLE_ANALISTA"));
+        } else if ("Gerente".equals(this.cargo)) {
             authorities.add(new SimpleGrantedAuthority("ROLE_GERENTE"));
             // Gerente tem acesso total
             authorities.add(new SimpleGrantedAuthority("ROLE_ANALISTA"));

@@ -56,7 +56,7 @@ public class AuthService implements UserDetailsService {
 
         String token = tokenService.gerarToken(usuario);
 
-        var userDTO = new loginUsuarioDTO(null, usuario.getId(), usuario.getNome(), usuario.getAvatarColor(), usuario.getCargo());
+        var userDTO = new loginUsuarioDTO(token, usuario.getId(), usuario.getNome(), usuario.getAvatarColor(), usuario.getCargo());
 
         return new AuthLoginResult(token, userDTO);
     }

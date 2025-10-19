@@ -23,7 +23,7 @@
 [INFO] Nothing to compile - all classes are up to date.
 [INFO] 
 [INFO] --- resources:3.3.1:testResources (default-testResources) @ realconsult ---
-[INFO] skip non existing resourceDirectory /Users/user/Documents/pmg-es-2025-2-ti3-9577100-realconsult/Codigo/backend/src/test/resources
+[INFO] skip non existing resourceDirectory /Users/user/Desktop/pmg-es-2025-2-ti3-9577100-realconsult-1/Codigo/backend/src/test/resources
 [INFO] 
 [INFO] --- compiler:3.14.0:testCompile (default-testCompile) @ realconsult ---
 [INFO] Nothing to compile - all classes are up to date.
@@ -43,26 +43,26 @@
 
  :: Spring Boot ::                (v3.5.3)
 
-2025-10-16T23:28:54.411-03:00  INFO 87006 --- [realconsult] [  restartedMain] c.p.realconsult.RealconsultApplication   : Starting RealconsultApplication using Java 17.0.15 with PID 87006 (/Users/user/Documents/pmg-es-2025-2-ti3-9577100-realconsult/Codigo/backend/target/classes started by user in /Users/user/Documents/pmg-es-2025-2-ti3-9577100-realconsult/Codigo/backend)
-2025-10-16T23:28:54.417-03:00  INFO 87006 --- [realconsult] [  restartedMain] c.p.realconsult.RealconsultApplication   : No active profile set, falling back to 1 default profile: "default"
-2025-10-16T23:28:54.561-03:00  INFO 87006 --- [realconsult] [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
-2025-10-16T23:28:54.562-03:00  INFO 87006 --- [realconsult] [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
-2025-10-16T23:28:57.364-03:00  INFO 87006 --- [realconsult] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2025-10-16T23:28:57.583-03:00  INFO 87006 --- [realconsult] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 197 ms. Found 7 JPA repository interfaces.
-2025-10-16T23:28:59.202-03:00  INFO 87006 --- [realconsult] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
-2025-10-16T23:28:59.242-03:00  INFO 87006 --- [realconsult] [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2025-10-16T23:28:59.243-03:00  INFO 87006 --- [realconsult] [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.42]
-2025-10-16T23:28:59.333-03:00  INFO 87006 --- [realconsult] [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2025-10-16T23:28:59.336-03:00  INFO 87006 --- [realconsult] [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 4771 ms
-2025-10-16T23:28:59.650-03:00  INFO 87006 --- [realconsult] [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2025-10-16T23:28:59.841-03:00  INFO 87006 --- [realconsult] [  restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.18.Final
-2025-10-16T23:28:59.941-03:00  INFO 87006 --- [realconsult] [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
-2025-10-16T23:29:00.821-03:00  INFO 87006 --- [realconsult] [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2025-10-16T23:29:00.919-03:00  INFO 87006 --- [realconsult] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2025-10-16T23:29:01.846-03:00  INFO 87006 --- [realconsult] [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
-2025-10-16T23:29:01.851-03:00  INFO 87006 --- [realconsult] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2025-10-16T23:29:01.943-03:00  WARN 87006 --- [realconsult] [  restartedMain] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2025-10-16T23:29:02.017-03:00  INFO 87006 --- [realconsult] [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+2025-10-18T16:14:50.923-03:00  INFO 64299 --- [realconsult] [  restartedMain] c.p.realconsult.RealconsultApplication   : Starting RealconsultApplication using Java 17.0.15 with PID 64299 (/Users/user/Desktop/pmg-es-2025-2-ti3-9577100-realconsult-1/Codigo/backend/target/classes started by user in /Users/user/Desktop/pmg-es-2025-2-ti3-9577100-realconsult-1/Codigo/backend)
+2025-10-18T16:14:50.954-03:00  INFO 64299 --- [realconsult] [  restartedMain] c.p.realconsult.RealconsultApplication   : No active profile set, falling back to 1 default profile: "default"
+2025-10-18T16:14:51.333-03:00  INFO 64299 --- [realconsult] [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-10-18T16:14:51.333-03:00  INFO 64299 --- [realconsult] [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-10-18T16:14:56.508-03:00  INFO 64299 --- [realconsult] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-10-18T16:14:56.879-03:00  INFO 64299 --- [realconsult] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 334 ms. Found 7 JPA repository interfaces.
+2025-10-18T16:15:00.516-03:00  INFO 64299 --- [realconsult] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-10-18T16:15:00.604-03:00  INFO 64299 --- [realconsult] [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-10-18T16:15:00.605-03:00  INFO 64299 --- [realconsult] [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.42]
+2025-10-18T16:15:00.768-03:00  INFO 64299 --- [realconsult] [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-10-18T16:15:00.770-03:00  INFO 64299 --- [realconsult] [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 9434 ms
+2025-10-18T16:15:01.112-03:00  INFO 64299 --- [realconsult] [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-10-18T16:15:01.288-03:00  INFO 64299 --- [realconsult] [  restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.18.Final
+2025-10-18T16:15:01.422-03:00  INFO 64299 --- [realconsult] [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-10-18T16:15:02.885-03:00  INFO 64299 --- [realconsult] [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-10-18T16:15:03.152-03:00  INFO 64299 --- [realconsult] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-10-18T16:15:03.994-03:00  INFO 64299 --- [realconsult] [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-10-18T16:15:04.000-03:00  INFO 64299 --- [realconsult] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-10-18T16:15:04.060-03:00  WARN 64299 --- [realconsult] [  restartedMain] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-10-18T16:15:04.247-03:00  INFO 64299 --- [realconsult] [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
 	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
 	Database driver: undefined/unknown
 	Database version: 2.3.232
@@ -70,68 +70,15 @@
 	Isolation level: undefined/unknown
 	Minimum pool size: undefined/unknown
 	Maximum pool size: undefined/unknown
-2025-10-16T23:29:05.192-03:00  INFO 87006 --- [realconsult] [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2025-10-16T23:29:05.369-03:00  INFO 87006 --- [realconsult] [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2025-10-16T23:29:06.243-03:00  INFO 87006 --- [realconsult] [  restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
-2025-10-16T23:29:08.455-03:00  INFO 87006 --- [realconsult] [  restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name authService
-2025-10-16T23:29:09.581-03:00  WARN 87006 --- [realconsult] [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2025-10-16T23:29:11.350-03:00  INFO 87006 --- [realconsult] [  restartedMain] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
-2025-10-16T23:29:11.620-03:00  INFO 87006 --- [realconsult] [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
-2025-10-16T23:29:11.693-03:00  INFO 87006 --- [realconsult] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
-2025-10-16T23:29:11.748-03:00  INFO 87006 --- [realconsult] [  restartedMain] c.p.realconsult.RealconsultApplication   : Started RealconsultApplication in 18.569 seconds (process running for 20.725)
-2025-10-16T23:29:53.911-03:00  INFO 87006 --- [realconsult] [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2025-10-16T23:29:53.911-03:00  INFO 87006 --- [realconsult] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2025-10-16T23:29:53.916-03:00  INFO 87006 --- [realconsult] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 4 ms
-2025-10-16T23:31:11.129-03:00  INFO 87006 --- [realconsult] [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
-2025-10-16T23:31:11.503-03:00  INFO 87006 --- [realconsult] [       Thread-5] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
-2025-10-16T23:31:11.737-03:00  INFO 87006 --- [realconsult] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
-2025-10-16T23:31:12.099-03:00  INFO 87006 --- [realconsult] [       Thread-5] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
-2025-10-16T23:31:13.049-03:00  WARN 87006 --- [realconsult] [       Thread-5] o.s.b.f.support.DisposableBeanAdapter    : Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-232]
-2025-10-16T23:31:13.050-03:00  INFO 87006 --- [realconsult] [       Thread-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
-2025-10-16T23:31:13.138-03:00  INFO 87006 --- [realconsult] [       Thread-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
-
-  .   ____          _            __ _ _
- /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
-( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
- \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
-  '  |____| .__|_| |_|_| |_\__, | / / / /
- =========|_|==============|___/=/_/_/_/
-
- :: Spring Boot ::                (v3.5.3)
-
-2025-10-16T23:31:15.560-03:00  INFO 87006 --- [realconsult] [  restartedMain] c.p.realconsult.RealconsultApplication   : Starting RealconsultApplication using Java 17.0.15 with PID 87006 (/Users/user/Documents/pmg-es-2025-2-ti3-9577100-realconsult/Codigo/backend/target/classes started by user in /Users/user/Documents/pmg-es-2025-2-ti3-9577100-realconsult/Codigo/backend)
-2025-10-16T23:31:15.560-03:00  INFO 87006 --- [realconsult] [  restartedMain] c.p.realconsult.RealconsultApplication   : No active profile set, falling back to 1 default profile: "default"
-2025-10-16T23:31:19.542-03:00  INFO 87006 --- [realconsult] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2025-10-16T23:31:19.827-03:00  INFO 87006 --- [realconsult] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 282 ms. Found 7 JPA repository interfaces.
-2025-10-16T23:31:23.290-03:00  INFO 87006 --- [realconsult] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
-2025-10-16T23:31:23.292-03:00  INFO 87006 --- [realconsult] [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2025-10-16T23:31:23.293-03:00  INFO 87006 --- [realconsult] [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.42]
-2025-10-16T23:31:23.507-03:00  INFO 87006 --- [realconsult] [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2025-10-16T23:31:23.507-03:00  INFO 87006 --- [realconsult] [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 7874 ms
-2025-10-16T23:31:24.380-03:00  INFO 87006 --- [realconsult] [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2025-10-16T23:31:24.394-03:00  INFO 87006 --- [realconsult] [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
-2025-10-16T23:31:24.600-03:00  INFO 87006 --- [realconsult] [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2025-10-16T23:31:24.603-03:00  INFO 87006 --- [realconsult] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
-2025-10-16T23:31:24.617-03:00  INFO 87006 --- [realconsult] [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-2 - Added connection conn10: url=jdbc:h2:mem:testdb user=SA
-2025-10-16T23:31:24.618-03:00  INFO 87006 --- [realconsult] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Start completed.
-2025-10-16T23:31:24.625-03:00  WARN 87006 --- [realconsult] [  restartedMain] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2025-10-16T23:31:24.626-03:00  INFO 87006 --- [realconsult] [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
-	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-2)']
-	Database driver: undefined/unknown
-	Database version: 2.3.232
-	Autocommit mode: undefined/unknown
-	Isolation level: undefined/unknown
-	Minimum pool size: undefined/unknown
-	Maximum pool size: undefined/unknown
-2025-10-16T23:31:27.530-03:00  INFO 87006 --- [realconsult] [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2025-10-16T23:31:27.777-03:00  INFO 87006 --- [realconsult] [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2025-10-16T23:31:28.240-03:00  INFO 87006 --- [realconsult] [  restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name authService
-2025-10-16T23:31:28.851-03:00  WARN 87006 --- [realconsult] [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2025-10-16T23:31:29.391-03:00  INFO 87006 --- [realconsult] [  restartedMain] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
-2025-10-16T23:31:29.447-03:00  INFO 87006 --- [realconsult] [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
-2025-10-16T23:31:29.474-03:00  INFO 87006 --- [realconsult] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
-2025-10-16T23:31:29.491-03:00  INFO 87006 --- [realconsult] [  restartedMain] c.p.realconsult.RealconsultApplication   : Started RealconsultApplication in 14.443 seconds (process running for 158.488)
-2025-10-16T23:31:31.094-03:00  INFO 87006 --- [realconsult] [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
-2025-10-16T23:31:39.362-03:00  INFO 87006 --- [realconsult] [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2025-10-16T23:31:39.363-03:00  INFO 87006 --- [realconsult] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2025-10-16T23:31:39.365-03:00  INFO 87006 --- [realconsult] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2025-10-18T16:15:14.636-03:00  INFO 64299 --- [realconsult] [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-10-18T16:15:15.029-03:00  INFO 64299 --- [realconsult] [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-10-18T16:15:15.983-03:00  INFO 64299 --- [realconsult] [  restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-10-18T16:15:20.553-03:00  INFO 64299 --- [realconsult] [  restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name authService
+2025-10-18T16:15:21.724-03:00  WARN 64299 --- [realconsult] [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-10-18T16:15:24.250-03:00  INFO 64299 --- [realconsult] [  restartedMain] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-10-18T16:15:24.528-03:00  INFO 64299 --- [realconsult] [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-10-18T16:15:24.706-03:00  INFO 64299 --- [realconsult] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-10-18T16:15:24.747-03:00  INFO 64299 --- [realconsult] [  restartedMain] c.p.realconsult.RealconsultApplication   : Started RealconsultApplication in 37.077 seconds (process running for 40.159)
+2025-10-18T16:16:14.537-03:00  INFO 64299 --- [realconsult] [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-10-18T16:16:14.537-03:00  INFO 64299 --- [realconsult] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-10-18T16:16:14.539-03:00  INFO 64299 --- [realconsult] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
