@@ -5,34 +5,37 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.springframework.lang.Nullable;
-
 
 @Entity
-@Table(name ="funcionario")
+@Table(name = "funcionario", uniqueConstraints = {
+        @UniqueConstraint(name = "uk_funcionario_auditoria_matricula", columnNames = {"auditoria_id", "matricula"})
+})
 @Data
-
-public class FuncionarioModel{
+public class FuncionarioModel {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "funcionario_id")
+    private Long funcionarioId;
+
     @Column(name = "matricula")
     private Long matricula;
+
+    @ManyToOne
+    @JoinColumn(name = "auditoria_id", referencedColumnName = "id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private AuditoriaModel auditoria;
 
     @NotBlank
     @Column(name = "nome_funcionario")
     private String nomeFuncionario;
 
     @NotBlank
+    @Column(name = "unidade")
     private String unidade;
 
     @Column(name = "situacao")
     private String situacao;
-
-    @ManyToOne
-    @JoinColumn(name= "auditoria_id", referencedColumnName = "id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @Nullable
-    private AuditoriaModel auditoria;
 
     @Column(name = "custo_atual")
     private Double custoAtual;
@@ -40,10 +43,8 @@ public class FuncionarioModel{
     @Column(name = "custo_proposto")
     private Double custoProposto;
 
-
     @Column(name = "economia_valor")
     private Double economiaValor;
-
 
     @Column(name = "economia_percentual")
     private Double economiaPercentual;
@@ -52,18 +53,14 @@ public class FuncionarioModel{
     @Column(name = "tipo_dia")
     private String tipoDia;
 
-
     @Column(name = "dias_mes")
     private Long diasMes;
-
 
     @Column(name = "valor_diario")
     private Double valorDiario;
 
-
     @Column(name = "custo_implantado")
     private Double valorCustoImplantado;
-
 
     @Column(name = "economia_implantada")
     private Double valorEconomiaImplantada;
@@ -92,7 +89,9 @@ public class FuncionarioModel{
     @Column(name = "linhaquatro_volta")
     private Double tarifaLinhaQuatroVolta;
 
-    @Column(name = "operadora_transporte")
-    private String operadoraTransporte;
+    @Column(name = "operadora_ida")
+    private String operadoraIda;
 
+    @Column(name = "operadora_volta")
+    private String operadoraVolta;
 }

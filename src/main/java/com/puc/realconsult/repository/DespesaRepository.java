@@ -33,4 +33,7 @@ public interface DespesaRepository extends JpaRepository<DespesaModel, Long> {
     
     // Ordenar por data decrescente
     List<DespesaModel> findAllByOrderByDataDesc();
+
+    //Buscas no Header
+    List<DespesaModel> findByTituloContainingIgnoreCase(String titulo);
 }

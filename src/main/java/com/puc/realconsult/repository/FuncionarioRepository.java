@@ -14,4 +14,11 @@ import java.util.Optional;
 
 @Repository
 public interface FuncionarioRepository extends JpaRepository<FuncionarioModel, Long> {
+    List<FuncionarioModel> findByNomeFuncionarioContainingIgnoreCase(String nomeFuncionario);
+
+    List<FuncionarioModel> findByAuditoriaId(Long auditoriaId);
+
+    List<FuncionarioModel> findByAuditoriaIdAndNomeFuncionarioContainingIgnoreCase(Long auditoriaId, String nome);
+
+    FuncionarioModel findByAuditoriaIdAndMatricula(Long auditoriaId, Long matricula);
 }

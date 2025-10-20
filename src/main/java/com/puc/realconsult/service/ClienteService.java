@@ -163,12 +163,9 @@ public class ClienteService {
         clienteRepository.save(clienteExistente);
     }
 
-    public List<ClienteModel> listarPorNome(String nome) {
-        List<ClienteModel> clientes = clienteRepository.buscarPorNome(nome);
-        if (clientes.isEmpty()) {
-            return Collections.emptyList();
-        }
-        return clientes;
+    public List<ClienteModel> listarPorNome(String termo) {
+        List<ClienteModel> clientes = clienteRepository.buscarPorNomeOuCnpj(termo);
+        return clientes.isEmpty() ? Collections.emptyList() : clientes;
     }
 
     public void deletarCliente(Long id) {

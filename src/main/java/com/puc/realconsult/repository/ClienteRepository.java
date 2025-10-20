@@ -14,7 +14,16 @@ import java.util.Optional;
 public interface ClienteRepository extends JpaRepository<ClienteModel, Long> {
     Optional<ClienteModel> findByCnpj(String cnpj);
     boolean existsByCnpj(String cnpj);
-    @Query(value = "SELECT * FROM cliente_model WHERE nome_empresa LIKE %:nome%", nativeQuery = true)
-    List<ClienteModel> buscarPorNome(@Param("nome") String nome);
+
+    @Query(value = """
+        SELECT * FROM cliente 
+        WHERE LOWER(nome_empresa) LIKE LOWER(CONCAT('%', :termo, '%'))
+           OR REPLACE(REPLACE(REPLACE(cnpj, '.', ''), '/', ''), '-', '') 
+              LIKE CONCAT('%', REPLACE(REPLACE(REPLACE(:termo, '.', ''), '/', ''), '-', ''), '%')
+    """, nativeQuery = true)
+    List<ClienteModel> buscarPorNomeOuCnpj(@Param("termo") String termo);
+
+    //Buscas no Header
+    List<ClienteModel> findByNomeEmpresaContainingIgnoreCase(String nomeEmpresa);
 
 }

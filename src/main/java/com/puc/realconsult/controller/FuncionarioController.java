@@ -14,27 +14,28 @@ import java.util.List;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/funcionario")
+@RequestMapping("/api/auditoria/{auditoriaId}")
 public class FuncionarioController {
 
     private final FuncionarioService service;
 
-    @PostMapping("/postdados")
-    public ResponseEntity getPlanilha(@RequestParam("file") MultipartFile file){
-        try (InputStream is = file.getInputStream()){
-             service.importarDados(is);
+    @PostMapping
+    public ResponseEntity<?> importarPlanilha(@PathVariable Long auditoriaId, @RequestParam("file") MultipartFile file) {
+        try (InputStream is = file.getInputStream()) {
+            FuncionarioService.DadosImportacao dados = service.importarDados(is, auditoriaId);
+            return ResponseEntity.ok().body(dados);
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro: " + e.getMessage());
         }
-        return ResponseEntity.ok().body(200);
     }
 
-    @GetMapping("/listarfuncionarios")
-    public ResponseEntity<List<FuncionarioModel>> listarFuncionarios(
+
+    @GetMapping
+    public ResponseEntity<List<FuncionarioModel>> listarFuncionarios(@PathVariable Long auditoriaId,
         @RequestParam(required = false) String busca) {
             try {
                 List<FuncionarioModel> funcionarios;
-                funcionarios = service.listarTodosFuncionarios();
+                funcionarios = service.listarPorAuditoria(auditoriaId, busca);
                 return ResponseEntity.ok(funcionarios);
 
             } catch (Exception e) {

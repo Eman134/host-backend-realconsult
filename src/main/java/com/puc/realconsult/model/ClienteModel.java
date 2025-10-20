@@ -25,11 +25,11 @@ public class ClienteModel {
     private String baseMapaCliente;
 
     @NotBlank(message = "nome deve ser preenchido")
-    @Column(name = "nome_empresa", length = 30)
+    @Column(name = "nome_empresa", length = 150)
     private String nomeEmpresa;
 
     @NotBlank(message = "Cnpj deve ser preenchido")
-    @Column(name = "cnpj", length = 20, unique = true)
+    @Column(name = "cnpj", length = 50, unique = true)
     private String cnpj;
 
     @Column(name = "path", length = 100)
