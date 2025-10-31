@@ -47,7 +47,8 @@ public class SecurityConfig {
     @Bean(name = "appCors")
     public CorsConfigurationSource appCors() {
         CorsConfiguration cfg = new CorsConfiguration();
-        cfg.setAllowedOrigins(List.of(allowedOrigin));
+        //cfg.setAllowedOrigins(List.of(allowedOrigin));
+        cfg.setAllowedOrigins(List.of("*"));
         cfg.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         cfg.setAllowedHeaders(List.of("*"));
         cfg.setExposedHeaders(List.of("Set-Cookie", "Authorization"));
@@ -57,16 +58,13 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", cfg);
 
-        System.out.println("CORS Configuration");
-        System.out.println(cfg);
-        
         return source;
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                .cors(c -> c.configurationSource(appCors()))  // Usar a configuração CORS com a URL única
+                .cors(c -> c.configurationSource(appCors()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(h -> h.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

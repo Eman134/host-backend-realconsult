@@ -114,13 +114,15 @@ public class AuthController {
 
     @PostMapping("/logout")
     public ResponseEntity<String> logout(jakarta.servlet.http.HttpServletResponse response) {
+        boolean crossSite = httpsConfig.isCrossSite();
         ResponseCookie del = ResponseCookie.from(COOKIE_NAME, "")
                 .httpOnly(true)
                 .secure(httpsConfig.isHttps())
-                .sameSite("None")
+                .sameSite(crossSite ? "None" : "Lax")
                 .path(COOKIE_PATH)
                 .maxAge(0)
                 .build();
+
         response.addHeader(HttpHeaders.SET_COOKIE, del.toString());
         return ResponseEntity.ok("Logout bem-sucedido");
     }
