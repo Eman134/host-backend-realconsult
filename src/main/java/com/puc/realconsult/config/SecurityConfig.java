@@ -47,8 +47,7 @@ public class SecurityConfig {
     @Bean(name = "appCors")
     public CorsConfigurationSource appCors() {
         CorsConfiguration cfg = new CorsConfiguration();
-        //cfg.setAllowedOrigins(List.of(allowedOrigin));
-        cfg.setAllowedOrigins(List.of("*"));
+        cfg.setAllowedOrigins(List.of(allowedOrigin));
         cfg.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         cfg.setAllowedHeaders(List.of("*"));
         cfg.setExposedHeaders(List.of("Set-Cookie", "Authorization"));
