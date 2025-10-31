@@ -6,6 +6,10 @@ import jakarta.servlet.http.HttpServletRequest;
 public final class RecoverToken {
     public static String recoverToken(HttpServletRequest request) {
         // 1) Cookie "token"
+        System.out.println("check");
+        System.out.println(request.getCookies() == null ? "null" : request.getCookies());
+        System.out.println(request.getHeader("Cookie"));
+        System.out.println(request.getHeader("Authorization"));
         if (request.getCookies() != null) {
             for (var c : request.getCookies()) {
                 if ("token".equals(c.getName()) && c.getValue()!=null && !c.getValue().isBlank()) {
