@@ -57,6 +57,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         try {
             String login = tokenService.validarToken(token);
+            System.out.println("Login: " + login);
             UserModel userModel = userRepository.findByEmail(login);
             if (userModel == null) {
                 sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "Usuário não existe");
