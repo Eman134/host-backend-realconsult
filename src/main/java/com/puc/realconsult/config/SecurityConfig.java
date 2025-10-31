@@ -71,7 +71,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**", "/h2-console/**").permitAll()
                         .requestMatchers("/api/search/**").permitAll()
                         .requestMatchers("/api/usuarios/**").hasAnyRole("ADMINISTRADOR", "GERENTE")
-                        .requestMatchers("/api/clientes/**").hasAnyRole("ADMINISTRADOR", "GERENTE")
+                        .requestMatchers("/api/clientes/**").hasAnyRole("ADMINISTRADOR", "GERENTE", "ANALISTA")
                         .requestMatchers("/api/despesas/**").hasAnyRole("ADMINISTRADOR", "GERENTE")
                         .requestMatchers("/api/economies/**").hasAnyRole("ADMINISTRADOR", "GERENTE")
                         .requestMatchers("/api/auditoria/**").hasAnyRole("ADMINISTRADOR", "GERENTE", "ANALISTA")

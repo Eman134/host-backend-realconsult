@@ -160,6 +160,10 @@ public class ClienteService {
             clienteExistente.setCnpj(novosDados.getCnpj());
         }
 
+        if(novosDados.getPerfilConsulta() != null ){
+            clienteExistente.setPerfilConsulta(novosDados.getPerfilConsulta());
+        }
+
         clienteRepository.save(clienteExistente);
     }
 

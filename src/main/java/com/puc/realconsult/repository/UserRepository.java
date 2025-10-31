@@ -27,6 +27,10 @@ public interface UserRepository extends JpaRepository<UserModel, Long> {
 
     UserModel findByEmail(String email);
 
+    List<UserModel> findByCargo(String cargo);
+
+    List<UserModel> findByCargoIn(List<String> cargos);
+
     //Buscas no Header
     List<UserModel> findByNomeContainingIgnoreCase(String nome);
 }

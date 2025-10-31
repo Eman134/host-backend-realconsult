@@ -3,6 +3,7 @@ package com.puc.realconsult.controller;
 import com.puc.realconsult.dto.ClienteDTO;
 import com.puc.realconsult.model.ClienteModel;
 import com.puc.realconsult.service.ClienteService;
+import com.puc.realconsult.service.NotificationService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,8 @@ public class ClienteController {
 
     @Autowired
     private ClienteService service;
+    @Autowired
+    private NotificationService notificationService;
 
     @GetMapping
     public ResponseEntity<List<ClienteModel>> listarTodos(){
@@ -26,10 +29,11 @@ public class ClienteController {
         return ResponseEntity.ok(clientes);
     }
 
-
     @PostMapping
     public ResponseEntity<ClienteModel> criar(@Valid @RequestBody ClienteModel cliente){
         service.cadastrar(cliente);
+        String[] cargos = {"Gerente", "Administrador"};
+        notificationService.enviarNotificacaoParaCargos(cargos, "Cliente " + cliente.getNomeEmpresa() + " cadastrado com sucesso!");
         return ResponseEntity.ok().body(cliente);
     }
 

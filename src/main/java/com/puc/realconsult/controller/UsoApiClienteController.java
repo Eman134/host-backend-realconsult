@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/usoapi")
+@RequestMapping("/api/usoApi")
 @AllArgsConstructor
 public class UsoApiClienteController {
 

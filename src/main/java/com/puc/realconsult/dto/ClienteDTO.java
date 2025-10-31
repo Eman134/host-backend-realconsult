@@ -9,4 +9,5 @@ public class ClienteDTO {
     private String cnpj;
     private String matricula;
     private String unidade;
+    private String perfilConsulta;
 }

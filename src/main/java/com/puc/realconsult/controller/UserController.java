@@ -3,6 +3,7 @@ package com.puc.realconsult.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.puc.realconsult.service.NotificationService;
 import com.puc.realconsult.utils.StatusUsuario;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,8 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
     
     private final UserService service;
-    
+    private final NotificationService notificationService;
+
     @GetMapping
     public ResponseEntity<List<UserModel>> listarUsuarios(
             @RequestParam(required = false) String busca) {
@@ -61,6 +63,8 @@ public class UserController {
     public ResponseEntity<?> criarUsuario(@Valid @RequestBody UserModel usuario) {
         try {
             UserModel usuarioCriado = service.criarUsuario(usuario);
+            String[] cargos = {"Gerente", "Administrador"};
+            notificationService.enviarNotificacaoParaCargos(cargos, "Usuário " + usuarioCriado.getNome() + " cadastrado!");
             return ResponseEntity.status(HttpStatus.CREATED).body(usuarioCriado);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest()

@@ -2,6 +2,7 @@ package com.puc.realconsult.controller;
 
 import com.puc.realconsult.model.DespesaModel;
 import com.puc.realconsult.service.DespesaService;
+import com.puc.realconsult.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,9 @@ public class DespesaController {
     
     @Autowired
     private DespesaService despesaService;
-    
+    @Autowired
+    private NotificationService notificationService;
+
     @GetMapping
     public ResponseEntity<List<DespesaModel>> listarDespesas(
             @RequestParam(required = false) String busca,
@@ -58,6 +61,8 @@ public class DespesaController {
     public ResponseEntity<?> criarDespesa(@Valid @RequestBody DespesaModel despesa) {
         try {
             DespesaModel despesaSalva = despesaService.salvar(despesa);
+            String[] cargos = {"Gerente", "Administrador"};
+            notificationService.enviarNotificacaoParaCargos(cargos, "Despesa " + despesaSalva.getTitulo() + " de  valor R$" + despesaSalva.getValor() + " cadastrada.");
             return ResponseEntity.ok(despesaSalva);
         } catch (Exception e) {
             return ResponseEntity.badRequest()
