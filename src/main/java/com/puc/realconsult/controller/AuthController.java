@@ -84,6 +84,8 @@ public class AuthController {
         boolean https = httpsConfig.isHttps();
         boolean crossSite = httpsConfig.isCrossSite();
 
+        System.out.println("HTTPS CONFIG: " + https + " " + crossSite);
+
         ResponseCookie.ResponseCookieBuilder delB = ResponseCookie.from(COOKIE_NAME, "")
                 .httpOnly(true)
                 .path(COOKIE_PATH)
