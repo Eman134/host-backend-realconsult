@@ -10,4 +10,5 @@ public class ClienteDTO {
     private String matricula;
     private String unidade;
     private String perfilConsulta;
+    private String avatarColor;
 }

@@ -15,6 +15,9 @@ public class ClienteModel {
     @Column(name = "id_cliente")
     private Long idCliente;
 
+    @Column(name = "avatar_color")
+    private String avatarColor;
+
     @Column(name = "uf_default", length = 20)
     private String ufDefault;
 

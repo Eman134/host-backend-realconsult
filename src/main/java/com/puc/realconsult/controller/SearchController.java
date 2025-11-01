@@ -30,10 +30,6 @@ public class SearchController {
                 despesaRepository.findByTituloContainingIgnoreCase(termo)
         ).orElse(Collections.emptyList()));
 
-        resultados.put("funcionarios", Optional.ofNullable(
-                funcionarioRepository.findByNomeFuncionarioContainingIgnoreCase(termo)
-        ).orElse(Collections.emptyList()));
-
         resultados.put("usuarios", Optional.ofNullable(
                 userRepository.findByNomeContainingIgnoreCase(termo)
         ).orElse(Collections.emptyList()));

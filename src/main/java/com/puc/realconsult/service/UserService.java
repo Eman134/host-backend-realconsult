@@ -3,6 +3,7 @@ package com.puc.realconsult.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.puc.realconsult.utils.GenerateColor;
 import com.puc.realconsult.utils.StatusUsuario;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -42,7 +43,7 @@ public class UserService {
         }
 
         usuario.setSenha(passwordEncoder.encode("123456"));
-        usuario.setAvatarColor(gerarCorAvatar(usuario.getNome()));
+        usuario.setAvatarColor(GenerateColor.generate(usuario.getNome()));
 
         return repository.save(usuario);
     }
@@ -59,7 +60,8 @@ public class UserService {
         usuarioExistente.setCargo(usuarioAtualizado.getCargo());
         usuarioExistente.setEmail(usuarioAtualizado.getEmail());
         usuarioExistente.setStatus(usuarioAtualizado.getStatus());
-        
+        usuarioExistente.setAvatarColor(usuarioAtualizado.getAvatarColor());
+
         return repository.save(usuarioExistente);
     }
     
@@ -72,20 +74,6 @@ public class UserService {
     
     public List<UserModel> listarUsuariosPorStatus(StatusUsuario status) {
         return repository.findByStatus(status);
-    }
-
-    private String gerarCorAvatar(String nome) {
-        int hash = nome.hashCode();
-
-        int r = Math.abs(hash % 128);
-        int g = Math.abs((hash >> 8) % 128);
-        int b = Math.abs((hash >> 16) % 128);
-
-        r = Math.max(r, 50);
-        g = Math.max(g, 50);
-        b = Math.max(b, 50);
-
-        return String.format("#%02x%02x%02x", r, g, b);
     }
 
 }

@@ -7,6 +7,7 @@ import com.puc.realconsult.exception.ResourceNotFound;
 import com.puc.realconsult.model.ClienteModel;
 import com.puc.realconsult.repository.ClienteRepository;
 import com.puc.realconsult.utils.CnpjUtils;
+import com.puc.realconsult.utils.GenerateColor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -134,6 +135,7 @@ public class ClienteService {
 
     public void cadastrar(ClienteModel cliente) {
         validarCnpj(cliente);
+        cliente.setAvatarColor(GenerateColor.generate(cliente.getNomeEmpresa()));
         clienteRepository.save(cliente);
     }
 
@@ -166,6 +168,10 @@ public class ClienteService {
 
         if(novosDados.getPerfilConsulta() != null ){
             clienteExistente.setPerfilConsulta(novosDados.getPerfilConsulta());
+        }
+
+        if(novosDados.getAvatarColor() != null ){
+            clienteExistente.setAvatarColor(novosDados.getAvatarColor());
         }
 
         clienteRepository.save(clienteExistente);
