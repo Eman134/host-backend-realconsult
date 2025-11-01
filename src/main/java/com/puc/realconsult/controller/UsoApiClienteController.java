@@ -81,6 +81,26 @@ public class UsoApiClienteController {
         return ResponseEntity.ok(saldo);
     }
 
+    @GetMapping("/cliente/{idCliente}/consultas/periodo")
+    public ResponseEntity<List<RequisicoesApiModel>> todasConsultasPeriodos(
+            @PathVariable("idCliente") Long idCliente,
+            @RequestParam("inicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime inicio,
+            @RequestParam("fim") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fim) {
+
+        List<RequisicoesApiModel> consultas = usoApiService.ConsultasRealizadasComPeriodo(idCliente,
+                Timestamp.valueOf(inicio), Timestamp.valueOf(fim));
+
+        return ResponseEntity.ok(consultas);
+    }
+
+    @GetMapping("/cliente/{idCliente}/consultas")
+    public ResponseEntity<List<RequisicoesApiModel>> consultasRealizadas(
+            @PathVariable("idCliente") Long idCliente){
+        List<RequisicoesApiModel> consultas = usoApiService.ConsultasRealizadasComPeriodo(
+                idCliente, null, null);
+        return ResponseEntity.ok(consultas);
+    }
+
     @GetMapping("/cliente/{idCliente}/saldo")
     public ResponseEntity<Integer> totalSaldo(@PathVariable("idCliente") Long idCliente){
         int saldo = usoApiService.totalConsultasSaldoComFiltro(

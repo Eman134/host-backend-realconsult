@@ -151,4 +151,22 @@ public class UsoApiService {
         return cliente.getNumeroConsultas() - realizadasFiltradas;
     }
 
+    public List<RequisicoesApiModel> ConsultasRealizadasComPeriodo(Long idCliente, Timestamp inicio, Timestamp fim) {
+        ClienteModel cliente = clienteRepository.findById(idCliente)
+                .orElseThrow(() -> new ResourceNotFound("Cliente não encontrado"));
+
+        String login = buscarUsuarioPorIdCliente(idCliente).getLogin();
+        List<RequisicoesApiModel> realizadas;
+
+        if (inicio != null && fim != null) {
+            // ✅ Busca apenas dentro do período informado
+            realizadas = requisicoesApiRepository.buscarReqPeriodoComTodosOsCampos(inicio, fim, login);
+        } else {
+            // ✅ Sem filtro → busca total de todas as requisições
+            realizadas = requisicoesApiRepository.buscarReqComTodosOsCampos(login);
+        }
+
+        return realizadas;
+    }
+
 }

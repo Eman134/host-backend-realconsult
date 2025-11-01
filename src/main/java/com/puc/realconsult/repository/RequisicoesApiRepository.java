@@ -1,6 +1,7 @@
 package com.puc.realconsult.repository;
 
 import com.puc.realconsult.model.RequisicoesApiModel;
+import com.puc.realconsult.model.UsuarioApiModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -56,10 +57,25 @@ public interface RequisicoesApiRepository extends JpaRepository<RequisicoesApiMo
                                              @Param("login") String login);
 
     @Query(value = """
+            SELECT * FROM requisicoes_api
+            WHERE begin >= :inicio 
+            AND begin <= :fim
+            AND login = :login """, nativeQuery = true)
+    List<RequisicoesApiModel> buscarReqPeriodoComTodosOsCampos(@Param("inicio") Timestamp inicio,
+                                                     @Param("fim") Timestamp fim,
+                                                     @Param("login") String login);
+
+
+    @Query(value = """
             SELECT COUNT(BEGIN) FROM requisicoes_api
             WHERE login = :login
             """,  nativeQuery = true)
     Integer buscarTodasReqPorLogin(@Param("login") String login);
+
+    @Query(value = """
+            SELECT * FROM requisicoes_api
+            WHERE login = :login """, nativeQuery = true)
+    List<RequisicoesApiModel> buscarReqComTodosOsCampos(@Param("login") String login);
 
 
 }
