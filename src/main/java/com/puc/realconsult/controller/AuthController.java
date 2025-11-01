@@ -81,8 +81,6 @@ public class AuthController {
                                                  HttpServletResponse response) {
         var result = authService.login(data, authenticationManager);
 
-        System.out.println("Result: " + result);
-
         boolean https = httpsConfig.isHttps();
         boolean crossSite = httpsConfig.isCrossSite();
 
