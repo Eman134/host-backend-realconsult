@@ -80,51 +80,7 @@ public class AuthController {
     public ResponseEntity<loginUsuarioDTO> login(@RequestBody @Valid AutenticarDTO data,
                                                  HttpServletResponse response) {
         var result = authService.login(data, authenticationManager);
-
-        boolean https = httpsConfig.isHttps();
-        boolean crossSite = httpsConfig.isCrossSite();
-
-        ResponseCookie.ResponseCookieBuilder delB = ResponseCookie.from(COOKIE_NAME, "")
-                .httpOnly(true)
-                .path(COOKIE_PATH)
-                .maxAge(0);
-
-        if (crossSite) {
-            delB.sameSite("None").secure(https);
-        } else {
-            delB.sameSite("Lax").secure(https);
-        }
-        response.addHeader(HttpHeaders.SET_COOKIE, delB.build().toString());
-
-        ResponseCookie.ResponseCookieBuilder jwtB = ResponseCookie.from(COOKIE_NAME, result.token())
-                .httpOnly(true)
-                .path(COOKIE_PATH)
-                .maxAge(Duration.ofDays(1));
-
-        if (crossSite) {
-            jwtB.sameSite("None").secure(https);
-        } else {
-            jwtB.sameSite("Lax").secure(https);
-        }
-        response.addHeader(HttpHeaders.SET_COOKIE, jwtB.build().toString());
-
         return ResponseEntity.ok(result.user());
-    }
-
-
-    @PostMapping("/logout")
-    public ResponseEntity<String> logout(jakarta.servlet.http.HttpServletResponse response) {
-        boolean crossSite = httpsConfig.isCrossSite();
-        ResponseCookie del = ResponseCookie.from(COOKIE_NAME, "")
-                .httpOnly(true)
-                .secure(httpsConfig.isHttps())
-                .sameSite(crossSite ? "None" : "Lax")
-                .path(COOKIE_PATH)
-                .maxAge(0)
-                .build();
-
-        response.addHeader(HttpHeaders.SET_COOKIE, del.toString());
-        return ResponseEntity.ok("Logout bem-sucedido");
     }
 
     @PostMapping("/reset-password")

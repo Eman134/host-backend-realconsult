@@ -1,7 +1,9 @@
 package com.puc.realconsult.controller;
 
 import com.puc.realconsult.model.AuditoriaModel;
+import com.puc.realconsult.model.ClienteModel;
 import com.puc.realconsult.service.AuditoriaService;
+import com.puc.realconsult.service.ClienteService;
 import com.puc.realconsult.service.NotificationService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -22,12 +24,15 @@ public class AuditoriaController {
     private final AuditoriaService service;
     @Autowired
     private NotificationService notificationService;
+    @Autowired
+    private ClienteService clienteService;
 
     @PostMapping
     public ResponseEntity<AuditoriaModel> criarAuditoria(@Valid @RequestBody AuditoriaModel auditoria){
         service.cadastrar(auditoria);
         String[] cargos = {"Analista", "Gerente", "Administrador"};
-        notificationService.enviarNotificacaoParaCargos(cargos, "Auditoria " + auditoria.getNome() + " criada no cliente " + auditoria.getCliente().getNomeEmpresa() + "!");
+        ClienteModel cliente = clienteService.getById(auditoria.getCliente().getIdCliente());
+        notificationService.enviarNotificacaoParaCargos(cargos, "Auditoria " + auditoria.getNome() + " criada no cliente " + cliente.getNomeEmpresa() + "!");
         return ResponseEntity.ok().body(auditoria);
     }
 

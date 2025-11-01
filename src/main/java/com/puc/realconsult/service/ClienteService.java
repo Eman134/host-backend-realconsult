@@ -93,6 +93,10 @@ public class ClienteService {
         clienteRepository.delete(cliente);
     }
 
+    public ClienteModel getById(Long id) {
+        return clienteRepository.getById(id);
+    }
+
     // =========================
     // Validação de regras de negócio
     // =========================

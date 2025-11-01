@@ -47,9 +47,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String token = RecoverToken.recoverToken(request);
 
-        System.out.println("Requisição para o endpoint: " + request.getRequestURI());
-        System.out.println(token);
-
         if (token == null) {
             sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "Token obrigatório");
             return;
@@ -57,7 +54,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         try {
             String login = tokenService.validarToken(token);
-            System.out.println("Login: " + login);
             UserModel userModel = userRepository.findByEmail(login);
             if (userModel == null) {
                 sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "Usuário não existe");
