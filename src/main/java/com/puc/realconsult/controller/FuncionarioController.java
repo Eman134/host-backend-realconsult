@@ -7,10 +7,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import jakarta.validation.Valid;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
@@ -20,9 +22,13 @@ public class FuncionarioController {
     private final FuncionarioService service;
 
     @PostMapping
-    public ResponseEntity<?> importarPlanilha(@PathVariable Long auditoriaId, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> importarPlanilha(
+            @PathVariable Long auditoriaId,
+            @RequestParam("file") MultipartFile file,
+            @RequestParam(value = "mesReferencia", required = false) Integer mesReferencia,
+            @RequestParam(value = "anoReferencia", required = false) Integer anoReferencia) {
         try (InputStream is = file.getInputStream()) {
-            FuncionarioService.DadosImportacao dados = service.importarDados(is, auditoriaId);
+            FuncionarioService.DadosImportacao dados = service.importarDados(is, auditoriaId, mesReferencia, anoReferencia);
             return ResponseEntity.ok().body(dados);
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro: " + e.getMessage());
@@ -42,4 +48,18 @@ public class FuncionarioController {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
             }
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<FuncionarioModel> buscarPorId( @PathVariable Long auditoriaId, @PathVariable("id") Long id){
+        Optional<FuncionarioModel> funcionario = service.buscarPorId(id);
+        return funcionario.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.ok().build());
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<FuncionarioModel> atualizar(@Valid @RequestBody FuncionarioModel funcionario, @PathVariable("id") long id){
+        service.atualizarFuncionario(id ,funcionario);
+        return ResponseEntity.ok().build();
+    }
+
 }

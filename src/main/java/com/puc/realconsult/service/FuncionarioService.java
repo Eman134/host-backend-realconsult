@@ -9,11 +9,13 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.puc.realconsult.exception.ResourceNotFound;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -31,10 +33,27 @@ public class FuncionarioService {
     }
 
     @Transactional
-    public DadosImportacao importarDados(InputStream is, Long auditoriaId) throws IOException {
+    public DadosImportacao importarDados(InputStream is, Long auditoriaId, Integer mesReferencia, Integer anoReferencia) throws IOException {
 
         AuditoriaModel auditoria = auditoriaRepository.findById(auditoriaId)
                 .orElseThrow(() -> new IllegalArgumentException("Auditoria não encontrada"));
+        
+        // SEMPRE definir mês/ano: usar data atual se não foi informado
+        if (mesReferencia == null || anoReferencia == null) {
+            java.time.LocalDate hoje = java.time.LocalDate.now();
+            mesReferencia = hoje.getMonthValue(); // 1-12
+            anoReferencia = hoje.getYear();
+            System.out.println("DEBUG FuncionarioService - Mês/ano não informado, usando data atual: " + mesReferencia + "/" + anoReferencia);
+        } else {
+            System.out.println("DEBUG FuncionarioService - Mês/ano informado pelo usuário: " + mesReferencia + "/" + anoReferencia);
+        }
+        
+        // Atualizar mês/ano da auditoria
+        auditoria.setMesReferencia(mesReferencia);
+        auditoria.setAnoReferencia(anoReferencia);
+        auditoriaRepository.save(auditoria);
+        
+        System.out.println("DEBUG FuncionarioService - Salvando funcionários com mês/ano: " + mesReferencia + "/" + anoReferencia);
 
         Workbook workbook = new XSSFWorkbook(is);
         Sheet sheet = workbook.getSheetAt(0);
@@ -81,11 +100,22 @@ public class FuncionarioService {
             funcionario.setTarifaLinhaQuatroVolta(row.getCell(20) != null ? row.getCell(20).getNumericCellValue() : 0);
             funcionario.setOperadoraIda(String.valueOf(row.getCell(21) != null ? row.getCell(21).getNumericCellValue() : 0));
             funcionario.setOperadoraVolta(String.valueOf(row.getCell(22) != null ? row.getCell(22).getNumericCellValue() : 0));
+            
 
-            FuncionarioModel funcionarioExistente = funcionarioRepository.findByAuditoriaIdAndMatricula(auditoriaId, funcionario.getMatricula());
+            funcionario.setMesReferencia(mesReferencia);
+            funcionario.setAnoReferencia(anoReferencia);
+
+
+            FuncionarioModel funcionarioExistente = funcionarioRepository.findByAuditoriaIdAndMatriculaAndMesReferenciaAndAnoReferencia(
+                auditoriaId, funcionario.getMatricula(), mesReferencia, anoReferencia);
+            
+
+            if (funcionarioExistente == null) {
+                funcionarioExistente = funcionarioRepository.findByAuditoriaIdAndMatricula(auditoriaId, funcionario.getMatricula());
+            }
 
             if (funcionarioExistente != null) {
-                // Atualizar todos os dados do funcionário existente
+
                 funcionarioExistente.setNomeFuncionario(funcionario.getNomeFuncionario());
                 funcionarioExistente.setUnidade(funcionario.getUnidade());
                 funcionarioExistente.setSituacao(funcionario.getSituacao());
@@ -108,11 +138,17 @@ public class FuncionarioService {
                 funcionarioExistente.setTarifaLinhaQuatroVolta(funcionario.getTarifaLinhaQuatroVolta());
                 funcionarioExistente.setOperadoraIda(funcionario.getOperadoraIda());
                 funcionarioExistente.setOperadoraVolta(funcionario.getOperadoraVolta());
+                
+                // SEMPRE garantir que mês/ano está preenchido (usando data atual se não foi informado)
+                funcionarioExistente.setMesReferencia(mesReferencia);
+                funcionarioExistente.setAnoReferencia(anoReferencia);
 
                 funcionarioRepository.save(funcionarioExistente);
                 funcionariosSubstituidos++;
             } else {
+                // Novo funcionário - garantir que tem mês/ano
                 funcionario.setAuditoria(auditoria);
+                // Mês/ano já foi definido acima (linha 98-99), garantindo que sempre tem valor
                 funcionarios.add(funcionario);
                 funcionariosAcrescentados++;
             }
@@ -120,6 +156,12 @@ public class FuncionarioService {
 
         funcionarioRepository.saveAll(funcionarios);
         workbook.close();
+
+        // Log final para confirmar
+        System.out.println("DEBUG FuncionarioService - Importação concluída:");
+        System.out.println("  - Funcionários adicionados: " + funcionariosAcrescentados);
+        System.out.println("  - Funcionários substituídos: " + funcionariosSubstituidos);
+        System.out.println("  - Todos os funcionários foram salvos com mês/ano: " + mesReferencia + "/" + anoReferencia);
 
         return new DadosImportacao(funcionariosAcrescentados, funcionariosSubstituidos);
     }
@@ -145,4 +187,39 @@ public class FuncionarioService {
             return funcionariosSubstituidos;
         }
     }
+
+    public Optional<FuncionarioModel> buscarPorId(Long id) {
+        return funcionarioRepository.findById(id);
+    }
+
+    public void atualizarFuncionario(Long id, FuncionarioModel funcionario) {
+        FuncionarioModel funcionarioExistente = funcionarioRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFound("Funcionário não encontrado com id " + id));
+
+        funcionarioExistente.setNomeFuncionario(funcionario.getNomeFuncionario());
+        funcionarioExistente.setUnidade(funcionario.getUnidade());
+        funcionarioExistente.setSituacao(funcionario.getSituacao());
+        funcionarioExistente.setCustoAtual(funcionario.getCustoAtual());
+        funcionarioExistente.setCustoProposto(funcionario.getCustoProposto());
+        funcionarioExistente.setEconomiaValor(funcionario.getEconomiaValor());
+        funcionarioExistente.setEconomiaPercentual(funcionario.getEconomiaPercentual());
+        funcionarioExistente.setTipoDia(funcionario.getTipoDia());
+        funcionarioExistente.setDiasMes(funcionario.getDiasMes());
+        funcionarioExistente.setValorDiario(funcionario.getValorDiario());
+        funcionarioExistente.setValorCustoImplantado(funcionario.getValorCustoImplantado());
+        funcionarioExistente.setValorEconomiaImplantada(funcionario.getValorEconomiaImplantada());
+        funcionarioExistente.setTarifaLinhaUmIda(funcionario.getTarifaLinhaUmIda());
+        funcionarioExistente.setTarifaLinhaDoisIda(funcionario.getTarifaLinhaDoisIda());
+        funcionarioExistente.setTarifaLinhaTresIda(funcionario.getTarifaLinhaTresIda());
+        funcionarioExistente.setTarifaLinhaQuatroIda(funcionario.getTarifaLinhaQuatroIda());
+        funcionarioExistente.setTarifaLinhaUmVolta(funcionario.getTarifaLinhaUmVolta());
+        funcionarioExistente.setTarifaLinhaDoisVolta(funcionario.getTarifaLinhaDoisVolta());
+        funcionarioExistente.setTarifaLinhaTresVolta(funcionario.getTarifaLinhaTresVolta());
+        funcionarioExistente.setTarifaLinhaQuatroVolta(funcionario.getTarifaLinhaQuatroVolta());
+        funcionarioExistente.setOperadoraIda(funcionario.getOperadoraIda());
+        funcionarioExistente.setOperadoraVolta(funcionario.getOperadoraVolta());
+
+        funcionarioRepository.save(funcionarioExistente);
+    }
+
 }

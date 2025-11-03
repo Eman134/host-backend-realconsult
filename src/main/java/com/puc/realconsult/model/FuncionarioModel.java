@@ -1,14 +1,24 @@
 package com.puc.realconsult.model;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
+
 @Entity
 @Table(name = "funcionario", uniqueConstraints = {
-        @UniqueConstraint(name = "uk_funcionario_auditoria_matricula", columnNames = {"auditoria_id", "matricula"})
+        @UniqueConstraint(name = "uk_funcionario_auditoria_matricula_mes_ano", 
+                columnNames = {"auditoria_id", "matricula", "mes_referencia", "ano_referencia"})
 })
 @Data
 public class FuncionarioModel {
@@ -94,4 +104,10 @@ public class FuncionarioModel {
 
     @Column(name = "operadora_volta")
     private String operadoraVolta;
+
+    @Column(name = "mes_referencia")
+    private Integer mesReferencia; // 1-12 (Janeiro a Dezembro), nullable para compatibilidade
+
+    @Column(name = "ano_referencia")
+    private Integer anoReferencia; // 2024, 2025, etc, nullable para compatibilidade
 }

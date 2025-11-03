@@ -1,5 +1,6 @@
 package com.puc.realconsult.repository;
 
+import com.puc.realconsult.model.ClienteModel;
 import com.puc.realconsult.model.UsuarioApiModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,6 +13,7 @@ import java.util.List;
 public interface UsuarioApiRepository extends JpaRepository<UsuarioApiModel, Long> {
     boolean existsByEmail(String email);
     boolean existsByLogin(String login);
+    boolean existsByIdCliente(ClienteModel cliente  );
     UsuarioApiModel findByLogin(String login);
     UsuarioApiModel findByEmail(String email);
     @Query("SELECT u FROM UsuarioApiModel u WHERE u.idCliente.idCliente = :idCliente")

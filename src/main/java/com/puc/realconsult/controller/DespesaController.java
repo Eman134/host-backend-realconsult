@@ -34,7 +34,7 @@ public class DespesaController {
         } else if (categoria != null && !categoria.trim().isEmpty()) {
             despesas = despesaService.buscarPorCategoria(categoria);
         } else if (periodo != null && !periodo.trim().isEmpty()) {
-            // Assumindo formato "YYYY-MM-DD,YYYY-MM-DD" para período
+
             String[] datas = periodo.split(",");
             if (datas.length == 2) {
                 LocalDate dataInicio = LocalDate.parse(datas[0]);

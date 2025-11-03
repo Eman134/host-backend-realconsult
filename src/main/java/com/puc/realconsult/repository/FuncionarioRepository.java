@@ -14,6 +14,9 @@ import java.util.Optional;
 
 @Repository
 public interface FuncionarioRepository extends JpaRepository<FuncionarioModel, Long> {
+
+    Optional<FuncionarioModel> findByMatricula(Long matricula);
+
     List<FuncionarioModel> findByNomeFuncionarioContainingIgnoreCase(String nomeFuncionario);
 
     List<FuncionarioModel> findByAuditoriaId(Long auditoriaId);
@@ -21,4 +24,10 @@ public interface FuncionarioRepository extends JpaRepository<FuncionarioModel, L
     List<FuncionarioModel> findByAuditoriaIdAndNomeFuncionarioContainingIgnoreCase(Long auditoriaId, String nome);
 
     FuncionarioModel findByAuditoriaIdAndMatricula(Long auditoriaId, Long matricula);
+    
+    FuncionarioModel findByAuditoriaIdAndMatriculaAndMesReferenciaAndAnoReferencia(
+        Long auditoriaId, Long matricula, Integer mesReferencia, Integer anoReferencia);
+    
+    List<FuncionarioModel> findByAuditoriaIdAndMesReferenciaAndAnoReferencia(
+        Long auditoriaId, Integer mesReferencia, Integer anoReferencia);
 }

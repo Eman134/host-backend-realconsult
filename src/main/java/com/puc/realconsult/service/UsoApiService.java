@@ -2,6 +2,7 @@ package com.puc.realconsult.service;
 
 
 import com.puc.realconsult.exception.ResourceNotFound;
+import com.puc.realconsult.exception.idNotFound;
 import com.puc.realconsult.model.ClienteModel;
 import com.puc.realconsult.model.RequisicoesApiModel;
 import com.puc.realconsult.model.UsuarioApiModel;
@@ -121,6 +122,9 @@ public class UsoApiService {
 
         ClienteModel cliente = clienteRepository.findById(idCliente)
                 .orElseThrow(() -> new ResourceNotFound("Cliente não encontrado"));
+        if(!usuarioApiRepository.existsByIdCliente(cliente) ){
+            throw new idNotFound("Não existe Login para esse cliente");
+        }
 
         List<RequisicoesApiModel> filtradas = filtrarRequisicoes(inicio, fim);
         List<RequisicoesApiModel> novaLista = new ArrayList<>();

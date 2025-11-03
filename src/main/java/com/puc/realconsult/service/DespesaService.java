@@ -51,7 +51,6 @@ public class DespesaService {
             .orElseThrow(() -> new RuntimeException("Despesa não encontrada com ID: " + id));
         
         despesaExistente.setTitulo(despesaAtualizada.getTitulo());
-        despesaExistente.setClienteContrato(despesaAtualizada.getClienteContrato());
         despesaExistente.setCategoria(despesaAtualizada.getCategoria());
         despesaExistente.setValor(despesaAtualizada.getValor());
         despesaExistente.setData(despesaAtualizada.getData());

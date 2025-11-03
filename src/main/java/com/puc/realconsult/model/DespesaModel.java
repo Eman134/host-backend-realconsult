@@ -24,11 +24,7 @@ public class DespesaModel {
     @Size(max = 100, message = "Título deve ter no máximo 100 caracteres")
     @Column(nullable = false)
     private String titulo;
-    
-    @NotBlank(message = "Cliente/Contrato é obrigatório")
-    @Size(max = 100, message = "Cliente/Contrato deve ter no máximo 100 caracteres")
-    @Column(name = "cliente_contrato", nullable = false)
-    private String clienteContrato;
+
     
     @NotBlank(message = "Categoria é obrigatória")
     @Size(max = 50, message = "Categoria deve ter no máximo 50 caracteres")

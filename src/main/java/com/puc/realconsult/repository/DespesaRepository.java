@@ -15,7 +15,6 @@ public interface DespesaRepository extends JpaRepository<DespesaModel, Long> {
     // Buscar despesas por termo (título, cliente ou categoria)
     @Query("SELECT d FROM DespesaModel d WHERE " +
            "LOWER(d.titulo) LIKE LOWER(CONCAT('%', :termo, '%')) OR " +
-           "LOWER(d.clienteContrato) LIKE LOWER(CONCAT('%', :termo, '%')) OR " +
            "LOWER(d.categoria) LIKE LOWER(CONCAT('%', :termo, '%'))")
     List<DespesaModel> findByTermo(@Param("termo") String termo);
     

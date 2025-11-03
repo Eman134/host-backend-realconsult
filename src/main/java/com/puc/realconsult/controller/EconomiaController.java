@@ -1,16 +1,22 @@
 package com.puc.realconsult.controller;
 
-import com.puc.realconsult.model.ClienteModel;
-import com.puc.realconsult.service.ClienteService;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.ArrayList;
+import com.puc.realconsult.dto.EconomiaDTO;
+import com.puc.realconsult.model.ClienteModel;
+import com.puc.realconsult.service.ClienteService;
+import com.puc.realconsult.service.EconomiaService;
 
 @RestController
 @RequestMapping("/api/economies")
@@ -18,6 +24,9 @@ public class EconomiaController {
 
     @Autowired
     private ClienteService clienteService;
+
+    @Autowired
+    private EconomiaService economiaService;
 
     @GetMapping("/filtrar")
     public ResponseEntity<List<ClienteModel>> filtrarEconomias(
@@ -108,6 +117,126 @@ public class EconomiaController {
                 "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"
             );
             return ResponseEntity.ok(ufs);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(List.of());
+        }
+    }
+
+    @GetMapping("/auditoria/{auditoriaId}")
+    public ResponseEntity<EconomiaDTO> getEconomiaPorAuditoria(
+            @PathVariable Long auditoriaId,
+            @RequestParam(required = false) Integer mesReferencia,
+            @RequestParam(required = false) Integer anoReferencia) {
+        try {
+            System.out.println("DEBUG EconomiaController - GET /auditoria/" + auditoriaId + 
+                    " (mesRef: " + mesReferencia + ", anoRef: " + anoReferencia + ")");
+            EconomiaDTO economia = economiaService.calcularEconomiaPorAuditoria(auditoriaId, mesReferencia, anoReferencia);
+            System.out.println("DEBUG EconomiaController - Retornando dados para auditoria " + auditoriaId);
+            return ResponseEntity.ok(economia);
+        } catch (IllegalArgumentException e) {
+            System.err.println("ERROR EconomiaController - Auditoria não encontrada: " + auditoriaId);
+            System.err.println("  - Exceção: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            System.err.println("ERROR EconomiaController - Erro ao calcular economia para auditoria " + auditoriaId);
+            System.err.println("  - Exceção: " + e.getClass().getName());
+            System.err.println("  - Mensagem: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+    
+    @GetMapping("/auditoria/{auditoriaId}/mensal")
+    public ResponseEntity<List<EconomiaDTO>> getEconomiaMensalPorAuditoria(
+            @PathVariable Long auditoriaId,
+            @RequestParam(required = false) Integer ano) {
+        
+        // Log imediato para garantir que o método está sendo chamado
+        System.out.println("========================================");
+        System.out.println("DEBUG EconomiaController - MÉTODO CHAMADO!");
+        System.out.println("  - Endpoint: /auditoria/" + auditoriaId + "/mensal");
+        System.out.println("  - Ano filtro: " + ano);
+        System.out.println("========================================");
+        
+        try {
+            
+            // Validar auditoriaId
+            if (auditoriaId == null || auditoriaId <= 0) {
+                System.err.println("ERROR EconomiaController - auditoriaId inválido: " + auditoriaId);
+                return ResponseEntity.badRequest().body(List.of());
+            }
+            
+            List<EconomiaDTO> economiasMensais = economiaService.calcularEconomiaMensalPorAuditoria(auditoriaId, ano);
+            
+            System.out.println("DEBUG EconomiaController - Retornando " + economiasMensais.size() + " meses de dados para auditoria " + auditoriaId);
+            
+            if (!economiasMensais.isEmpty()) {
+                System.out.println("DEBUG EconomiaController - Primeiro mês: " + economiasMensais.get(0).mesReferencia() + "/" + economiasMensais.get(0).anoReferencia());
+                System.out.println("DEBUG EconomiaController - Último mês: " + economiasMensais.get(economiasMensais.size() - 1).mesReferencia() + "/" + economiasMensais.get(economiasMensais.size() - 1).anoReferencia());
+            } else {
+                System.out.println("DEBUG EconomiaController - Nenhum dado mensal encontrado para auditoria " + auditoriaId);
+            }
+            
+            // Sempre retornar 200 OK, mesmo que a lista esteja vazia (é válido não ter dados mensais)
+            return ResponseEntity.ok(economiasMensais);
+            
+        } catch (IllegalArgumentException e) {
+            System.err.println("ERROR EconomiaController - Auditoria não encontrada: " + auditoriaId);
+            System.err.println("  - Mensagem: " + e.getMessage());
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            System.err.println("ERROR EconomiaController - Erro ao buscar dados mensais para auditoria " + auditoriaId);
+            System.err.println("  - Exceção: " + e.getClass().getName());
+            System.err.println("  - Mensagem: " + e.getMessage());
+            e.printStackTrace();
+            // Retornar 200 com lista vazia em vez de 400, pois lista vazia é um resultado válido
+            return ResponseEntity.ok(List.of());
+        }
+    }
+
+    @GetMapping("/cliente/{clienteId}")
+    public ResponseEntity<List<EconomiaDTO>> getEconomiaPorCliente(@PathVariable Long clienteId) {
+        try {
+            List<EconomiaDTO> economias = economiaService.calcularEconomiaPorCliente(clienteId);
+            return ResponseEntity.ok(economias);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(List.of());
+        }
+    }
+
+    @GetMapping("/cliente/{clienteId}/agregado")
+    public ResponseEntity<EconomiaDTO> getEconomiaAgregadaPorCliente(
+            @PathVariable Long clienteId,
+            @RequestParam(required = false) Integer mesReferencia,
+            @RequestParam(required = false) Integer anoReferencia) {
+        try {
+            EconomiaDTO economia = economiaService.calcularEconomiaAgregadaPorCliente(clienteId, mesReferencia, anoReferencia);
+            return ResponseEntity.ok(economia);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/cliente/{clienteId}/agregado/mensal")
+    public ResponseEntity<List<EconomiaDTO>> getEconomiaMensalAgregadaPorCliente(
+            @PathVariable Long clienteId,
+            @RequestParam(required = false) Integer ano) {
+        try {
+            List<EconomiaDTO> economias = economiaService.calcularEconomiaMensalPorCliente(clienteId, ano);
+            return ResponseEntity.ok(economias);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(List.of());
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity<List<EconomiaDTO>> listarTodasEconomias() {
+        try {
+            List<EconomiaDTO> economias = economiaService.listarTodasEconomias();
+            return ResponseEntity.ok(economias);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(List.of());
         }

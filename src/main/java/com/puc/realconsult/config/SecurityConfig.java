@@ -47,8 +47,13 @@ public class SecurityConfig {
     @Bean(name = "appCors")
     public CorsConfigurationSource appCors() {
         CorsConfiguration cfg = new CorsConfiguration();
-        cfg.setAllowedOrigins(List.of(allowedOrigin));
-        cfg.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        // Aceitar localhost em diferentes portas para desenvolvimento
+        cfg.setAllowedOrigins(List.of(
+            allowedOrigin,
+            "http://localhost:3000",
+            "http://localhost:3001"
+        ));
+        cfg.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         cfg.setAllowedHeaders(List.of("*"));
         cfg.setExposedHeaders(List.of("Set-Cookie", "Authorization"));
         cfg.setAllowCredentials(true);

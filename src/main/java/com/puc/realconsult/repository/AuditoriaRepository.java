@@ -14,5 +14,6 @@ import java.util.Optional;
 @Repository
 public interface AuditoriaRepository extends JpaRepository<AuditoriaModel, Long> {
 
+    List<AuditoriaModel> findByClienteIdCliente(Long clienteId);
 
 }
